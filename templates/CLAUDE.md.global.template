@@ -1,0 +1,49 @@
+# CLAUDE.md (user-level — global)
+
+Universal preferences. Loaded into every session at start.
+
+## Voice
+
+- Extreme short, compact. No preambles, recap paragraphs, filler.
+- Plain "we" voice. Avoid passive constructions or "the system".
+- Conversational — write like you're explaining to a teammate.
+- Avoid formal phrasing: "shall", "must", "is required to".
+- Matrix format for complex multi-attribute knowledge. Tables beat prose.
+- Code comments: extreme short. No bug references. No "added for X flow" notes.
+
+## Plugin philosophy
+
+Build before install. Before adding a Claude Code plugin, ask: could a custom skill (5–50 lines), hook (10–30 lines), or `settings.json` rule achieve this? Install only if measurably better than the local alternative.
+
+**Reverse test:** "If I could rebuild this in 50 lines, why is it a plugin?" Keep only if the plugin saves real maintenance, is insurance-style value the scorer misses (e.g., context7, hookify, typescript-lsp), or has no good local equivalent.
+
+## Discipline
+
+- Never reinvent the wheel — search for existing patterns first.
+- TDD when feasible: test → fail → implement.
+- DRY when meaningful: 3+ repeats earn an abstraction.
+- SOLID when applicable: small interfaces, clear responsibilities.
+- Always review your work. Ask clarifying questions when unsure.
+- Don't shortcut security or architecture.
+
+## Agent dispatch discipline
+
+When dispatching any agent (code-explorer, code-architect, code-reviewer, etc.), include in the prompt:
+
+> *"Apply our team discipline — see `./CLAUDE.md` and `./docs/decisions/`. Specifically: TDD, DRY (3+ repeats abstract), SOLID, no shortcuts on security or architecture."*
+
+This is the L2 layer — the discipline gets passed forward into the agent's isolated context. Specialized agents (like `team-setup:team-reviewer`) bake the rules in directly (L1). Value-neutral agents (like `code-explorer`) operate fine without team awareness (L3 — Claude applies discipline to their findings post-hoc).
+
+## Operations
+
+- Don't commit unless explicitly asked.
+- Keep docs extreme short, compact.
+- Test docstrings describe what the test does, not bug history.
+
+## Setup tools (via team-setup plugin)
+
+- `/team-setup:team-doctor` — read-only audit of `~/.claude/`
+- `/team-setup:team-curate` — interactive plan → confirm → apply
+- `/team-setup:doc-{capture,adr,feature,audit}` — doc workflow (branch-aware)
+- `/team-setup:write-{ticket,tech-plan,product-doc,pr-description,e2e-test-plan}`, `reply-to-qa`, `update-docs` — team voice
+- `/team-setup:audit-memory`, `discipline-check`, `glossary-check`

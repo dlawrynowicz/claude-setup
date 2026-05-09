@@ -1,0 +1,36 @@
+# CLAUDE.md ({{PROJECT_NAME}})
+
+{{Brief 1-2 sentence description of what this project is and who it's for.}}
+
+## Domain language
+
+See [`docs/glossary.md`](docs/glossary.md) for terminology mappings.
+
+## Architecture
+
+See [`docs/architecture.md`](docs/architecture.md) for the system overview (when present). Domain-area docs live alongside (e.g. `docs/transactions.md`, `docs/integrations.md`).
+
+## Key behaviors
+
+{{2-4 short bullets of project-specific facts that surprise newcomers. Examples:}}
+- {{Model X behaves Y because Z}}
+- {{Function A is called from B but not C}}
+
+## Commands
+
+```bash
+{{commands to run tests, lint, build — keep brief, link to fuller docs}}
+```
+
+## Decisions
+
+- System-wide ADRs: [`docs/decisions/`](docs/decisions/)
+- Feature-scoped ADRs: `docs/features/<feature>/decisions/`
+- See `docs/features/<feature>/design.md` and `plan.md` for in-flight work
+
+## Project conventions
+
+- Date-prefix time-stamped artifacts (`YYYY-MM-DD-foo.md`)
+- ADRs use numbered names (`NNNN-title.md`); per-feature ADRs have their own counter
+- Plan revisions append-only at top; never rewrite history
+- Feature docs travel with their branch — `docs/features/<feature>/` may exist on a feature branch but not on main

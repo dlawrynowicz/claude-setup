@@ -1,0 +1,8 @@
+{
+  "name": "team-setup",
+  "version": "0.1.0",
+  "description": "Team standard setup for Claude Code — voice rules, layered enforcement, doc workflow, writing skills, audit + curate flow. Built by the claude-learnings workshop project, eats its own dog food.",
+  "author": {
+    "name": "claude-learnings team"
+  }
+}

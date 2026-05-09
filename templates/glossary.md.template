@@ -1,0 +1,37 @@
+# {{PROJECT_NAME}} Glossary
+
+> Mappings, not definitions. Format: `term → meaning (NOT alternative meaning)`.
+> **Owner:** {{TEAM}} · **Last verified:** {{YYYY-MM-DD}}
+
+Reads alongside `CLAUDE.md` (referenced by ticket / PR / doc workflows). When you find yourself defining a term to a teammate or to Claude, add it here — that's the signal it earns its place.
+
+## Internal acronyms
+
+- DSR → Daily Sales Report (NOT Data Subject Request)
+- {{add yours — collision-prone acronyms first}}
+
+## Product ↔ code mappings
+
+- "the dashboard" → `app/admin/overview/page.tsx`
+- {{add yours — what humans say vs where it lives}}
+
+## Overloaded common words
+
+- "agent" → insurance broker (NEVER an AI agent in this repo)
+- {{add yours — common words your domain uses differently}}
+
+## Team idioms
+
+- "smoke a ticket" → move to In Review without dev work
+- {{add yours — phrases new teammates wouldn't google}}
+
+---
+
+## Format guide
+
+- Lead with the term, then `→`, then the meaning. One line per entry.
+- Disambiguate collisions explicitly: `X → Y (NOT Z)`.
+- **Don't** define terms the model already knows (API, REST, `useEffect`, framework basics).
+- **Don't** write encyclopedic prose — mappings beat definitions.
+- Drop entries unverified for 12+ months. Stale entries inject confident wrong priors.
+- Audit via `/team-setup:glossary-check` (warns on terminology drift in commits).
