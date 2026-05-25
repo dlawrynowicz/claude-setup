@@ -9,7 +9,7 @@ Universal preferences. Loaded into every session at start.
 - Conversational — write like you're explaining to a teammate.
 - Avoid formal phrasing: "shall", "must", "is required to".
 - Matrix format for complex multi-attribute knowledge. Tables beat prose.
-- Code comments: extreme short. No bug references. No "added for X flow" notes.
+- Code comments/docstrings: extreme short, plain natural language. No bug references, no "added for X flow". No robot-speak or fancy words ("suspect", "diverged", "no-op", "inflates", "chokepoint", "materialize") — use the plain word. No arrow chains (A → B → C); write the sentence. Wrap at sentence/clause boundaries (each continued line ends in `.`/`,`/`:`), never mid-phrase. Test docstrings describe behavior, not the bug/QA report.
 
 ## Plugin philosophy
 

@@ -87,6 +87,10 @@ Workarounds:
 
 Applies to `tdd`, `execute`, `brainstorm` (when generating example code), and any skill that produces code.
 
+### Comments and docstrings
+
+Plain natural language, short, no robot-speak — this is universal, not Funnel-specific, so the canonical rule lives in the global `CLAUDE.md` Voice section (no fancy words, no arrow chains, wrap at sentence/clause boundaries, test docstrings describe behavior). The reviewer flags robotic comments.
+
 ## Skill authoring
 
 Every new skill (vendored or original) must:

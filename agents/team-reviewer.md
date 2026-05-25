@@ -40,6 +40,14 @@ For the code you're given (file path, diff range, or area):
 - **Bypasses:** flag any `--no-verify`, `// eslint-disable-next-line`, `// TODO: fix later`, `# type: ignore` without justification.
 - **Test coverage:** flag if a substantial code change ships with no test additions.
 
+### Comment & docstring style (team standard, see SHARED.md)
+
+- Plain and short — flag robot-speak and fancy words ("suspect", "diverged", "inflates", "no-op", "fleet survey", "inverted/broken-date shape", "chokepoint", "materialize", "wire-through"). The plain word is the fix.
+- No arrow chains (`A → B → C`) describing flow; no framing labels ("Note:", "Sanity:", "Heals three...").
+- Wrapped comment/docstring lines break at a sentence or clause boundary (end in `.`/`,`/`:`), not mid-phrase.
+- Test docstrings describe behavior, not bug/QA references.
+- Low severity, but flag it — this is a team standard, not a personal naming preference.
+
 ## Output format
 
 ```
@@ -63,7 +71,7 @@ Be concise. **Severity discrimination matters more than completeness** — surfa
 
 ## Don't
 
-- Don't suggest cosmetic refactors (formatting, naming preferences).
+- Don't suggest cosmetic refactors (formatting, code naming preferences) — but comment/docstring style above IS a team standard, so do flag it.
 - Don't auto-fix; never write to files (your tools are read-only).
 - Don't be exhaustive; pick the items the user can actually act on.
 - Don't dispatch sub-agents recursively.
