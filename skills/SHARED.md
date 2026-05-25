@@ -16,6 +16,13 @@ All Funnel-specific skills MUST read this file first. It defines the shared lang
 - Short sentences. No filler. No corporate-speak. No robot-speak ("The system shall ensure...")
 - Don't hedge — if it's confirmed, state it. If it's uncertain, flag it explicitly.
 
+### Display copy: let punctuation set the line breaks
+
+For presentation/display text — slide copy, hero lines, big callouts (not flowing markdown prose) — break each line at sentence and clause boundaries (`.` and `,`), one clause per line. It reads with spoken rhythm instead of a robotic wall of text.
+
+- Place the breaks yourself (`<br>`, or a new line); let the punctuation decide where.
+- Don't lean on a narrow container to wrap — it splits clauses at random ("talk / about."). Widen the container so each clause stays whole on its line.
+
 ## Quality Bar: Pass Technical Review
 
 Our output is reviewed by senior engineers who are skeptical of AI-generated work. Every artifact must read like a senior engineer wrote it — not like AI generated it. Reviewers will flag:

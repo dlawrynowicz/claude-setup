@@ -28,7 +28,7 @@ For each gap the audit found, propose a specific change. Group by scope:
 - `permissions.deny` missing baseline entries → JSON deep-merge (concat + dedupe)
 - `permissions.ask` missing baseline entries → same
 - `statusLine.command` not at expected path → set to `$HOME/.claude/statusline-launcher.sh`
-- `statusline.mjs` / `statusline-launcher.sh` missing → copy from `setup-pack/` (legacy bootstrap location during build phase)
+- `statusline.mjs` / `statusline-launcher.sh` missing → copy from `<plugin-root>/setup/` (run `setup/install.sh` once for the OS-level wiring)
 - Plugins outside keep list → offer to set their `enabledPlugins` entries to `false` (this is the prune)
 
 ### Project shared (`./`)

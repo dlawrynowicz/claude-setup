@@ -1,99 +1,138 @@
 # team-setup
 
-Claude Code plugin bundling our team's standard setup: voice rules, layered enforcement, doc workflow, writing skills, and an interactive audit-and-apply flow.
+Claude Code plugin that turns curated team standards into **auto-firing skills, hooks, and agents** — so the team's discipline (TDD, DRY, SOLID, layered enforcement) shows up without anyone having to remember to invoke it.
 
-## What it gives you
-
-- **Setup wizard** — `/team-setup:team-doctor` audits your `~/.claude/`; `/team-setup:team-curate` proposes and applies changes per scope (global / project shared / project local).
-- **Doc workflow** — branch-aware capture into a feature-grouped layout (`docs/features/<feature>/`); ADR scaffolding with auto-numbering; drift detection.
-- **Writing skills** — team-voice ticket, tech plan, product doc, PR description, E2E test plan, QA reply, doc update.
-- **Layered enforcement** — hard rules via `settings.json` deny + PreToolUse hooks; medium via PostToolUse nudges + SessionStart silent audits; soft via CLAUDE.md principles.
-
-## Install
-
-### Local dev (current)
-
-Clone the repo and point Claude Code at the plugin directory:
+## Quick start
 
 ```bash
-git clone <repo-url> team-setup
+git clone <this-repo-url> team-setup
+bash team-setup/setup/bootstrap.sh    # pre-flight: deps check, prints next-step command
 claude --plugin-dir team-setup
 ```
 
-The plugin auto-discovers skills, hooks, and agents from this directory. Nothing to register manually.
+Inside Claude, run the guided onboarding wizard:
 
-### Platform requirements
+```
+/team-setup:bootstrap-new-machine    # explicit-invoke; walks audit → apply → verify
+```
 
-- **macOS / Linux** — runs natively.
-- **Windows** — runs under **WSL** (the hooks are bash scripts; native cmd/PowerShell is not supported). Git Bash works for most cases too but WSL is the tested path.
+Or skip the wizard and smoke-test directly — type *"let's add a feature"*, `team-setup:brainstorm` should auto-fire. If it doesn't, see [Verify](#verify-it-works) and [Troubleshooting](#troubleshooting).
 
-`.gitattributes` enforces LF on `*.sh`, so cloning on Windows won't break line endings.
+## What's inside
 
-### Custom marketplace (planned, post-stabilization)
+| | inventory |
+|---|---|
+| **25 skills** | `brainstorm`, `plan`, `execute`, `debug`, `tdd`, `discipline-check`, `using-team-setup` (meta), `bootstrap-new-machine` (guided onboarding wizard), `team-doctor`, `team-curate`, `doc-feature`, `doc-capture`, `doc-adr`, `doc-audit`, `audit-memory`, `scratch` (mid-session notes), `recall` (search prior sessions), `glossary-check`, `update-docs`, `write-ticket`, `write-tech-plan`, `write-product-doc`, `write-pr-description`, `write-e2e-test-plan`, `reply-to-qa` *(plus `SHARED.md` — shared content, not a skill)* |
+| **4 agents** | `architect` (read-only design), `explore` (read-only investigation), `planner` (write plans, dispatched via `context: fork` from `plan` skill), `team-reviewer` (discipline-check verdict) |
+| **5 handlers across 4 hook events** | `SessionStart` → `session-start.sh` · `UserPromptSubmit` → `user-prompt-submit.sh` · `PreToolUse:Bash` → `scan-destructive.sh` · `PostToolUse:Write|Edit` → `review-required.sh` + `capture-nudge.sh` |
+| **4 templates** | `CLAUDE.md.global.template`, `CLAUDE.md.project.template`, `glossary.md.template`, `settings.json.template` |
+| **lib/triggers.sh** | canonical trigger patterns — single source of truth for what fires which skill |
+| **setup/** | OS-level integration (run once per machine): `bootstrap.sh` (pre-flight) · `install.sh` (statusline + CLAUDE.md + settings.json merge) · `statusline.mjs` + launcher · `demo-tarballs.sh` (workshop tool). See [setup/README.md](setup/README.md). |
+
+## How skills auto-fire
+
+Four mechanisms compose so skills fire without manual `/name` invocation:
+
+| layer | mechanism | role |
+|---|---|---|
+| 1 | Aggressive descriptions (`"MUST use when X"`) in skill frontmatter | trigger surface in the registry |
+| 2 | `using-team-setup` meta-skill, always-on | creates Claude's bias to check the catalog |
+| 3 | `SessionStart` hook → `additionalContext` priming | primes session-level attention |
+| 4 | `UserPromptSubmit` hook with trigger matching | active per-message reminder |
+
+Each layer alone is insufficient. All four = reliable auto-trigger. Tune the catalog by editing `lib/triggers.sh`.
+
+## First-time setup
+
+**Guided (recommended):** `/team-setup:bootstrap-new-machine` — wizard that runs through audit + curate + verify in order, with confirmation at each phase.
+
+**Manual:** invoke the underlying skills directly:
 
 ```bash
-/plugin marketplace add your-org/claude-plugins
-/plugin install team-setup@your-org
-```
-
-## Use
-
-### First-time setup on a new machine
-
-```
 /team-setup:team-doctor      # read-only audit of your ~/.claude/
 /team-setup:team-curate      # interactive: propose plan → confirm per file → apply
 ```
 
-Both are idempotent. Re-run anytime — the doctor reports drift, the curate flow asks before changing anything. Per scope, you choose: install globally, scope to current project, or local override.
+Both idempotent. Re-run anytime to reconcile drift. The curate flow asks per-item before applying anything.
 
-### Daily doc workflow
+Pre-flight (outside Claude): `bash setup/bootstrap.sh` from the cloned repo verifies dependencies (bash 4+, git, claude CLI) and prints the launch command with platform-specific install hints if anything's missing.
 
-```
-/team-setup:doc-feature <name>     # scaffold docs/features/<name>/ with starter design.md, plan.md, notes.md
-/team-setup:doc-capture            # capture current session's work to the right doc location (auto-detects type)
-/team-setup:doc-adr                # scaffold next-numbered ADR (system-wide or feature-scoped)
-/team-setup:doc-audit              # drift report — branch-aware, distinguishes branch view from main
-```
+## Daily commands
 
-### Writing in team voice
+| user intent | skill / agent |
+|---|---|
+| "let's build X" / "add a feature" | `team-setup:brainstorm` |
+| spec exists, write a plan | `team-setup:plan` *(auto-forks to `planner` subagent)* |
+| plan exists, execute it | `team-setup:execute` |
+| bug, test failure, unexpected behavior | `team-setup:debug` |
+| implementing — test first | `team-setup:tdd` |
+| review my changes | `team-setup:discipline-check` → dispatches `team-reviewer` agent |
+| explore an unfamiliar codebase area | `explore` agent *(Claude dispatches via Agent tool — not a slash command)* |
+| design a new feature architecture | `architect` agent *(Claude dispatches via Agent tool — not a slash command)* |
+| scaffold feature docs | `team-setup:doc-feature <name>` |
+| capture session work | `team-setup:doc-capture` |
+| record a decision | `team-setup:doc-adr` |
+| writing artifacts (PR, ticket, etc.) | `team-setup:write-*` |
 
-```
-/team-setup:write-ticket
-/team-setup:write-tech-plan
-/team-setup:write-product-doc
-/team-setup:write-pr-description
-/team-setup:write-e2e-test-plan
-/team-setup:reply-to-qa
-/team-setup:update-docs
-```
+Full catalog: invoke `team-setup:using-team-setup` for the live list inside Claude.
 
-Each preserves the team's voice (terse, "we" form, conversational, matrix-format for complex content). Project-specific glossaries are honored automatically.
+## Verify it works
 
-### Discipline + memory
+After `--plugin-dir` loads:
 
-```
-/team-setup:audit-memory       # consolidate ~/.claude/projects/*/memory/ — flag stale, deduplicate
-/team-setup:discipline-check   # TDD/DRY/SOLID checklist for current code
-/team-setup:glossary-check     # warn on terminology drift in current files
-```
+1. **Plugin loaded?** Run `/plugin` — `team-setup` should appear in the list.
+2. **Skills auto-fire?** Type *"let's brainstorm a feature"* — `brainstorm` skill should activate (you'll see it in the response).
+3. **Per-message hooks fire?** After any prompt, look for *"REMINDER: ..."* in the response context — that's the `UserPromptSubmit` hook.
+4. **SessionStart priming?** Check Claude's first response of a new session — it should mention the plugin catalog.
+5. **Full menu?** Type `/team-setup:` (with the colon) — full skill list shows in the slash command menu.
+
+If anything fails, jump to [Troubleshooting](#troubleshooting).
+
+## Platform requirements
+
+| platform | status |
+|---|---|
+| macOS | native |
+| Linux | native |
+| Windows | runs under **WSL** — bash hooks; native cmd/PowerShell unsupported |
+
+`.gitattributes` enforces LF on `*.sh`, so cloning on Windows won't break line endings under WSL.
+
+**Dependencies:** `bash` (4+). No `jq`, no `node`, no other tools — the plugin is pure bash + markdown.
 
 ## Customization
 
-Personal overrides take precedence over plugin defaults. To override any skill, drop a same-named skill into `~/.claude/skills/<skill-name>/`. Claude Code resolves personal → plugin in that order, so your customization wins.
+**Personal overrides take precedence.** Drop a same-named skill into `~/.claude/skills/<skill-name>/` and your version wins. Resolution order: personal → plugin.
 
-For project-specific tuning, put files in `<repo>/.claude/`. The plugin's `team-curate` skill scaffolds these on demand.
+**Project tuning** lives in `<repo>/.claude/`. `team-curate` scaffolds these on demand per scope (global / project shared / project local).
+
+**Trigger patterns** are in `lib/triggers.sh` — single canonical source. Edit `match_skill` to add or refine trigger keywords. Both hooks (`SessionStart` and `UserPromptSubmit`) source this file.
+
+## Troubleshooting
+
+| symptom | check |
+|---|---|
+| Plugin not loaded | `/plugin` should list team-setup. If not: verify `--plugin-dir` path is absolute; restart Claude |
+| Skill doesn't auto-fire | Look for `REMINDER: ...` in response after your message — that confirms `UserPromptSubmit` fired. If missing: check `lib/triggers.sh` trigger patterns match your phrasing |
+| Hook fails on Windows | Must run inside **WSL** — native cmd/PowerShell can't run bash scripts. Verify `bash --version` works in your shell |
+| `SessionStart` priming missing | Open `<session-context>` (first response of session) — should say *"team-setup plugin loaded"* |
+| Wrong skill fires | Multiple plugins compete on description ranking. Disable overlapping plugins or use `/team-setup:<name>` explicitly |
+| Skills moved / renamed | Restart Claude — plugin discovery happens at session start |
 
 ## Architecture
 
-The plugin organizes content by enforcement level (hard / medium / soft) and by scope (global default / project override). Three principles, documented as ADRs in the parent project:
+Three discipline principles drive the design:
 
-- **Build before install** — `../docs/decisions/0001-build-before-install.md`
-- **Layered enforcement** — `../docs/decisions/0002-layered-enforcement.md`
-- **Feature-grouped docs** — `../docs/decisions/0003-feature-grouped-docs.md`
+- **Build before install** — prefer custom skills / hooks / rules over installing plugins; install only when measurably better
+- **Layered enforcement** — hard rules at `settings.json` + PreToolUse; medium via PostToolUse nudges; soft via CLAUDE.md principles
+- **Feature-grouped docs** — `docs/features/<feature>/{design,plan,notes}.md`; cross-cutting in `docs/{decisions,handoffs}/`
 
-Full design rationale: `../docs/features/team-setup-plugin/design.md`.
+Full design rationale lives in the parent workshop project (the `claude-learnings` repo where this plugin originated). This README intentionally stays self-contained — you don't need anything outside this repo to use the plugin.
 
 ## Status
 
-Build in progress. See `../docs/features/team-setup-plugin/plan.md` for the 8-step sequence and current state.
+Stable. 22 skills + 4 agents + 5 hooks production-tested in the user's daily workflow. Plan revisions and case study in the parent `claude-learnings` repo.
+
+## License
+
+Currently unlicensed — add a `LICENSE` file before publishing publicly. MIT or Apache 2.0 are sensible defaults for Claude Code plugins.
