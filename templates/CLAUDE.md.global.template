@@ -10,6 +10,7 @@ Universal preferences. Loaded into every session at start.
 - Avoid formal phrasing: "shall", "must", "is required to".
 - Matrix format for complex multi-attribute knowledge. Tables beat prose.
 - Code comments/docstrings: extreme short, plain natural language. No bug references, no "added for X flow". No robot-speak or fancy words ("suspect", "diverged", "no-op", "inflates", "chokepoint", "materialize") — use the plain word. No arrow chains (A → B → C); write the sentence. Wrap at sentence/clause boundaries (each continued line ends in `.`/`,`/`:`), never mid-phrase. Test docstrings describe behavior, not the bug/QA report.
+- **State what the code does, not what it avoids.** Drop defensive design justification — "in one query", "no per-row N+1", "so the loop doesn't…", "without a separate lookup", "for the whole batch", "ContentType ids are stable so a single resolve is enough". The body shows the design; the test pins the contract. If the design choice is genuinely surprising and a future reader might revert it, the test name and assertion are the documentation, not the docstring.
 
 ## Plugin philosophy
 

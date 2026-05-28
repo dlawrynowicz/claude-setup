@@ -45,6 +45,7 @@ For the code you're given (file path, diff range, or area):
 - Plain and short — flag robot-speak and fancy words ("suspect", "diverged", "inflates", "no-op", "fleet survey", "inverted/broken-date shape", "chokepoint", "materialize", "wire-through"). The plain word is the fix.
 - No arrow chains (`A → B → C`) describing flow; no framing labels ("Note:", "Sanity:", "Heals three...").
 - Wrapped comment/docstring lines break at a sentence or clause boundary (end in `.`/`,`/`:`), not mid-phrase.
+- **States what the code does, not what it avoids.** Flag defensive design justification — "in one query", "no per-row N+1", "so the loop doesn't…", "without a separate lookup", "for the whole batch", "ContentType ids are stable so a single resolve is enough". The body shows the design; the test pins the contract.
 - Test docstrings describe behavior, not bug/QA references.
 - Low severity, but flag it — this is a team standard, not a personal naming preference.
 
