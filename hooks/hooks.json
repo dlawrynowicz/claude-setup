@@ -37,11 +37,19 @@
         "hooks": [
           {
             "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks-handlers/wrap-comments.sh"
+          },
+          {
+            "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks-handlers/review-required.sh"
           },
           {
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks-handlers/capture-nudge.sh"
+          },
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks-handlers/code-style-reminder.sh"
           }
         ]
       }

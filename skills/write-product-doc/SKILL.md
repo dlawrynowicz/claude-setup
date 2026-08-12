@@ -91,6 +91,10 @@ Explicitly call out what we do NOT support, so engineers don't waste time invest
 ### 6. Flow summary
 For multi-step processes, numbered steps with brief explanations.
 
+### 7. Plain-then-technical bridge
+State the requirement in product language first, then a "Technically, it means..." sentence that names the models. Keeps the requirement readable for Product while staying precise for engineers.
+> When a transfer is started, the rentable items should be carried over and recalculated. *Technically, it means we carry over the `SelectedRentalOptionItem` instances and recalculate the `SelectedRentalOptionFee`/`SelectedRentalOptionItemFee` from the configuration.*
+
 ## Source Attribution
 
 - Every requirement needs a Source — who confirmed it, when, and context
@@ -114,6 +118,7 @@ For multi-step processes, numbered steps with brief explanations.
 - Mark unconfirmed requirements: `{warning}Unconfirmed — needs Product sign-off{warning}`
 - Mark undocumented areas: `{info}TODO: No requirements documented for [topic]. Needs investigation.{info}`
 - Mark contradictions: `{warning}This contradicts [other requirement] — needs resolution{warning}`
+- Assign a named owner to anything unresolved — `@Max to confirm` beats "needs confirmation". An open question with no owner never gets answered.
 - Gaps are valuable — a doc that shows what we don't know is more useful than one that pretends we know everything
 
 ## Review Checklist

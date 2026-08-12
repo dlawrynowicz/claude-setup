@@ -40,11 +40,17 @@ For the code you're given (file path, diff range, or area):
 - **Bypasses:** flag any `--no-verify`, `// eslint-disable-next-line`, `// TODO: fix later`, `# type: ignore` without justification.
 - **Test coverage:** flag if a substantial code change ships with no test additions.
 
+### Type coverage
+
+- In a typed language (TS, hinted Python), new functions/methods should be fully typed — params AND return, not just the return.
+- Flag untyped new code where the surrounding module already uses hints; match its convention (e.g. Python `TYPE_CHECKING` + string annotations to dodge circular imports).
+- Name by domain concept, not mechanism — `pending_fees` not `overlay_fees`, "scheduled price" not "version". A name that says HOW instead of WHAT in the domain should be renamed.
+
 ### Comment & docstring style (team standard, see SHARED.md)
 
 - Plain and short — flag robot-speak and fancy words ("suspect", "diverged", "inflates", "no-op", "fleet survey", "inverted/broken-date shape", "chokepoint", "materialize", "wire-through"). The plain word is the fix.
 - No arrow chains (`A → B → C`) describing flow; no framing labels ("Note:", "Sanity:", "Heals three...").
-- Wrapped comment/docstring lines break at a sentence or clause boundary (end in `.`/`,`/`:`), not mid-phrase.
+- Wrapped comment/docstring lines break at a sentence or clause boundary (end in `.`/`,`/`:`), not mid-phrase; an abbreviation's period (`e.g.`, `i.e.`, `etc.`, `vs.`) is not a boundary.
 - **States what the code does, not what it avoids.** Flag defensive design justification — "in one query", "no per-row N+1", "so the loop doesn't…", "without a separate lookup", "for the whole batch", "ContentType ids are stable so a single resolve is enough". The body shows the design; the test pins the contract.
 - Test docstrings describe behavior, not bug/QA references.
 - Low severity, but flag it — this is a team standard, not a personal naming preference.
