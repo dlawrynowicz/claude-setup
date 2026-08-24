@@ -144,7 +144,8 @@ def rewrap_python(source: list, width: int) -> list:
             out.append(raw)
             index += 1
             body = []
-            while index < len(source) and source[index].strip() != '"""':
+            # A closing """ can sit at the end of a text line, not only on one of its own.
+            while index < len(source) and not source[index].rstrip().endswith('"""'):
                 body.append(source[index])
                 index += 1
             out.extend(rewrap_docstring(body, indent, width))

@@ -44,11 +44,12 @@ Capture domain knowledge discovered during feature work into local docs. These a
 
 ## Writing Rules
 
-- Follow the tone from SHARED.md: "we" language, short sentences, no filler
+Follow SHARED.md "Documentation voice" — describe what the system does, no reader instructions, no open questions about behavior we verified, no meta-narration. On top of that:
+
 - Every requirement needs a source — who confirmed it, when, what context
 - Use matrices for cross-transaction-type comparisons
 - Use requirement-with-example pattern for non-obvious behavior
-- Mark unconfirmed items with TODO
+- Mark unconfirmed requirements with TODO — that's a known gap, not hedging about code we already read
 - Keep docs compact — prefer tables and matrices over paragraphs
 
 ## After Updating

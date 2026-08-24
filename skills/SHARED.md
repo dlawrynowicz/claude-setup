@@ -25,6 +25,21 @@ For presentation/display text — slide copy, hero lines, big callouts (not flow
 - Place the breaks yourself (`<br>`, or a new line); let the punctuation decide where.
 - Don't lean on a narrow container to wrap — it splits clauses at random ("talk / about."). Widen the container so each clause stays whole on its line.
 
+## Documentation voice
+
+A doc describes what the system does. Most of what makes docs read as AI-written is everything else that creeps in.
+
+- **Describe, don't instruct.** Cut reader-directed lines — "pick the right one", "handle both", "use X if you need Y". State the behavior; the reader decides what to do with it. Headings name their content: "Two shapes", not "Two shapes — pick the right one".
+- **No questions about behavior we verified.** "Worth confirming that's intended", "should we…", "we may want to check" is conversation, not documentation. If we read the code, state what it does and take the open question to the team. An unconfirmed *requirement* is different — it still gets an explicit TODO with attribution.
+- **Document our system, not someone else's.** Describe what we store, publish, and fire. Don't write what another team's integration has to change — give them our behavior and let them decide. "What Online Leasing publishes" beats "Do we need to change NSI?".
+- **No meta-narration.** "Five steps.", "Read this first", "That was the point", "Nothing here was built specially for X". The content is the content.
+- **Bullets, not run-ons.** Three or more items strung through a sentence with `·` or `/` is a list. Multi-attribute comparisons are tables.
+- **Say what's important, then stop.** Length is not thoroughness. A reader who finds the answer in the first screen trusts the rest.
+
+### Explaining a flow
+
+When a doc explains how something works end to end, walk the real path in order — each step naming the function or file that does the work, and what it decides. A numbered walkthrough of the actual call path beats a summary of the outcome: it survives the next refactor because a reader can check it against the code.
+
 ## Quality Bar: Pass Technical Review
 
 Our output is reviewed by senior engineers who are skeptical of AI-generated work. Every artifact must read like a senior engineer wrote it — not like AI generated it. Reviewers will flag:
@@ -78,6 +93,29 @@ Domain knowledge gets discovered across different feature branches, tickets, sta
 
 ## Code writing conventions
 
+### Check the data before you design
+
+When a design turns on how data actually looks — "the unused option has no row", "imports always set this field", "this column distinguishes X from Y" — verify it against real data before building on it. The dev snapshot is a subsample and will mislead you: a scenario that appears twice locally can be 116 rows at production scale, and a field that looks unused locally can be set on 98% of real rows.
+
+- **Query staging (full-scale) when the local answer would change the design.** Read-only aggregates: `count`, `values(...).annotate(Count(...))`. State the N in your write-up so the reader can judge it.
+- **A single record is not a pattern.** Before generalising from one row, count how many rows share that shape. "I found one" and "this is how it works" are different claims.
+- **Name the discriminator and prove it discriminates.** If you claim field F separates real data from scaffolding, find a case where the two differ on F. If they don't, F is not the signal — keep looking. (`added_with` was identical on both; `pricing_type` was not.)
+- **When a check contradicts your earlier conclusion, say so plainly and re-derive.** Don't defend the first answer.
+
+### Add nothing without a producer and a reader
+
+Before adding a field, column, parameter, or flag: name the code that sets it to something other than its default, and the code that reads it. If either is "nothing yet", don't add it — a column plus a data migration to store one constant is pure cost, and it is cheap to add later when a caller exists.
+
+The same test retires code: an export, type alias, or parameter nothing outside the module uses is dead. Delete it.
+
+### One write site
+
+When two branches need the same field written, write it once. An extracted helper that duplicates the write (`obj.amount = x; obj.flag = y; obj.save()` in both the helper and the caller) is worse than one branch with a shared tail — the copies drift. Reach for a flag threaded through the function only if collapsing genuinely costs behaviour; usually the "extra" work on the other path is a no-op you can just run.
+
+### Extract at the second caller
+
+Refining "extract when reused": **one caller → inline it; two callers → extract.** Recheck the count after later edits in the same change — a helper that was correctly inlined at one caller should come back out when a second caller appears, and vice versa.
+
 ### Implementation before imports
 
 Write the body that USES imports BEFORE adding the import statements at the top of a file. Format-on-save tools (TypeScript `organizeImports`, ESLint `no-unused-vars` autofix, ruff, etc.) strip imports they see as unused — if the body using them isn't there yet, save deletes them and the next compile fails.
@@ -94,6 +132,13 @@ Applies to `tdd`, `execute`, `brainstorm` (when generating example code), and an
 Plain natural language, short, no robot-speak — the canonical rule lives in the global `CLAUDE.md` Voice section (no fancy words, no arrow chains, test docstrings describe behavior). The reviewer flags robotic comments.
 
 **Most comments are redundant — delete them.** Cut any comment that restates the symbol it sits above (a header paraphrasing the function/const/type name). Never name the feature, ticket, or flag in a comment, and don't cross-reference old/replaced code ("Mirrors X", "lifted from Y"). Keep only what a reader can't infer: real domain *why*, what a cryptic field actually holds, and empty-`catch`/empty-block notes.
+
+**If it needs explaining, fix the code instead.** A comment is maintenance you have taken on, and it rots silently — the code changes, the sentence doesn't. Prefer a clearer name, a smaller branch, or a named predicate over a sentence explaining the tangle. The reliable tells that a comment should be deleted rather than written:
+
+- **It argues for the design.** "rather than making another", "so the toggle doesn't…", "because that would double-charge". The code shows the choice; the test pins it.
+- **It points at another module as the oracle.** "Mirrors `SelectedRentalOptionFee.type`" — the reader has this file, not that one, and the two drift.
+- **It makes a claim about callers.** "Callers prefetch `x` to stay query-free" was false — the only caller didn't. Statements about code you don't control go stale the moment someone adds a caller.
+- **It restates a constant or tuple in prose** right above the definition.
 
 **Line breaks — default to one line.** Enforced by `lib/wrap_comments.py`, which the `wrap-comments` PostToolUse hook runs on each Python, TypeScript and JavaScript file written, rewrapping only comments next to lines that changed. Run it by hand with `--check` in CI. The rest of this rule is what it implements.
 
@@ -193,6 +238,28 @@ Vague names are the thing that gets corrected in review most. Get them right the
 - **One caller is not a smell.** A query method or a mutation helper with a single caller is fine when it's idiomatic encapsulation — don't inline it just to cut a method.
 - **No silent guards in a shared method.** If callers already validate the input, the shared method assumes a valid input — don't add a guard that swallows bad input (`if x is None: return None`). Keep any back-compat guard local to the one caller that needs it.
 - **Don't refactor legacy to reuse new code.** When new code (behind a flag) sits beside a legacy path that's deleted when the flag retires, keep legacy byte-for-byte — new↔legacy duplication is intentional and temporary.
+
+### Over-decomposition — the tell reviewers name most often
+
+"A million small functions, I'm having a hard time reading those" is the feedback. Extracting until every function is six lines makes each piece explainable on its own, but following one operation then means holding five stack frames at once. It reads as AI-written and reviewers stop trusting the code.
+
+- **Extract when a function is reused or answers a named question — never to hit a line count.** A helper called once, from one place, belongs inlined in its caller. (This does not contradict "one caller is not a smell" above: idiomatic encapsulation is fine, a chain of single-use wrappers is not.)
+- **Prefer concrete duplication over a generic mover.** Where two model families mirror each other (SRO/ERO, lease/quote, create/update), write both versions out. Duplication we can read beats an abstraction we can't.
+- **Field names as string parameters is the worst offender.** `move(fee_field="selected_rental_option_fee", owner_field="selected_rental_option")` and then `**{f"{fee_field}_id": value}` forces the reader to resolve strings against models in their head. Write it twice, concretely.
+- **The entry point is the table of contents.** Read `main()` (or the top-level function) start to finish and you should know what the code does; steps sit under it in call order.
+- **A linear 80-line function with early returns beats eight 10-line functions.** The reader follows one thread instead of chasing wrappers.
+
+**Calibrate against a neighbour, not an ideal.** Before calling code done, count the functions and compare against a file already in the repo that does a similar job. Many more functions than the neighbour is the signal — go read that file and match its shape. A one-off data script that grew to 37 functions when every comparable script in the same folder has 2-10 is the case that produced this rule.
+
+### Tests that actually pin behaviour
+
+A green test proves nothing until you know why it's green.
+
+- **Every guard gets its negative case.** Assert both that the kept thing is kept and that the dropped thing is dropped. A test with only the positive assertion passes whether or not your filter runs.
+- **Watch the negative case fail before the fix exists.** If it passes against the old code, it isn't testing your change.
+- **Fixtures must match production configuration on the fields the guard reads.** A factory default that differs from real config makes the test pass for the wrong reason — a capacity guard never fired in a test because the factory left `maximum_count` unset while every real row has it at 1. Check the real value (see "Check the data before you design") and set it in the fixture.
+- **Widening a condition? Find the tests pinning the narrow behaviour first.** `grep` the assertion, not just the function name. Broadening a guard from "flagged rows" to "all rows of this kind" silently changes behaviour the suite already promised; if a test fails, the test is usually right and your rule is too wide.
+- **Don't reach into private attributes from a test.** Calling `orchestrator._sro_creator` couples the test to internals; instantiate the public class instead.
 
 ## Skill authoring
 
