@@ -7,7 +7,7 @@ description: MUST use BEFORE any creative work - creating features, building com
 
 Turn ideas into validated designs through collaborative dialogue. Save the result. Then implement - never before.
 
-**Vendored from `superpowers:brainstorming` v5.1.0** ([source](file:///Users/broda/.claude/plugins/cache/claude-plugins-official/superpowers/5.1.0/skills/brainstorming/SKILL.md)). Adapted for team-setup voice, ADR refs, and our doc workflow.
+**Vendored from `superpowers:brainstorming` v5.1.0**. Adapted for team-setup voice, ADR refs, and our doc workflow.
 
 ## The hard gate
 

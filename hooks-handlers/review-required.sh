@@ -40,11 +40,12 @@ fi
 # A Bash write carries its payload in the command itself, so the command is what gets counted.
 if [ "$tool" = "Bash" ]; then
   case "$command_text" in
-    *">"*|*"tee "*|*"sed -i"*|*".write("*|*"writeFileSync"*) ;;
+    *">"*|*"tee "*|*"sed -i"*|*".write("*|*"writeFileSync"*|*"'w'"*|*'"w"'*) ;;
     *) exit 0 ;;
   esac
   content=$command_text
   file_path=$(printf '%s' "$command_text" \
+    | grep -oE "[A-Za-z0-9_./-]+\.(py|ts|tsx|js|jsx)([^A-Za-z0-9]|$)" \
     | grep -oE "[A-Za-z0-9_./-]+\.(py|ts|tsx|js|jsx)" \
     | head -1 || true)
   [ -z "$file_path" ] && exit 0

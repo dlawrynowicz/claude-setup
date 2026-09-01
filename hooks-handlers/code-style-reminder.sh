@@ -41,18 +41,19 @@ fi
 # python/node snippet opening a file for writing. Reading a source file is not a write.
 if [ -z "$file_path" ] && [ -n "$command_text" ]; then
   case "$command_text" in
-    *">"*|*"tee "*|*"sed -i"*|*".write("*|*"open("*|*"writeFileSync"*) ;;
+    *">"*|*"tee "*|*"sed -i"*|*".write("*|*"writeFileSync"*|*"'w'"*|*'"w"'*) ;;
     *) exit 0 ;;
   esac
   file_path=$(printf '%s' "$command_text" \
+    | grep -oE "[A-Za-z0-9_./-]+\.(py|ts|tsx|js|jsx)([^A-Za-z0-9]|$)" \
     | grep -oE "[A-Za-z0-9_./-]+\.(py|ts|tsx|js|jsx)" \
     | head -1 || true)
 fi
 
 [ -z "$file_path" ] && exit 0
 case "$file_path" in
-  *.py)                      family="python"; skill="the project's Python clean-code skill" ;;
-  *.ts|*.tsx|*.js|*.jsx)     family="frontend"; skill="the project's frontend clean-code skill" ;;
+  *.py)                      family="python"; skill="Python clean-code" ;;
+  *.ts|*.tsx|*.js|*.jsx)     family="frontend"; skill="frontend clean-code" ;;
   *) exit 0 ;;
 esac
 
@@ -61,7 +62,7 @@ marker="${TMPDIR:-/tmp}/claude-style-reminder-${session:-$PPID}-${family}"
 touch "$marker"
 
 cat <<REMINDER
-House comment style applies to this file (skills/SHARED.md, "House style"; also the $skill skill):
+House comment style applies to this file (skills/SHARED.md, "House style"; also the project's $skill skill):
 - Branching on a domain case? Lead-in line, then one bullet per case, naming the case in domain
   words rather than the isinstance/type check. Not a prose paragraph.
 - Say "we", present tense. Not "the system", not passive.
