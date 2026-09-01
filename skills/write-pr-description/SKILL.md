@@ -16,7 +16,7 @@ Write PR descriptions that read like a human wrote them - high-level overview, e
 1. Read shared rules: [SHARED.md](../SHARED.md) - tone, terminology
 2. Read real examples for tone reference: [../write-ticket/examples/good-tickets.md](../write-ticket/examples/good-tickets.md)
 3. Gather context: `git log`, `git diff`, changed files
-4. Extract Jira ticket from branch name - branches follow `OL-XXXX-description` or `GENIE-XXXX-description` etc. Build the Jira link: `https://nestiolistings.atlassian.net/browse/<TICKET-ID>`. If branch starts with `OLBP` it's a feature branch for the Onlineleasing Billing & Payments pod (not a ticket branch) - ask the user for the Jira ticket or leave blank.
+4. Extract the ticket id from the branch name - branches follow `<PROJECT>-XXXX-description`. Build the ticket link: `<your-jira-host>/browse/<TICKET-ID>`. Some prefixes mark a long-lived team branch rather than a ticket - when the branch has no ticket id, ask the user or leave it blank.
 5. Write the PR description following the rules below
 6. Output as copy-pasteable markdown for GitHub UI
 
@@ -24,10 +24,10 @@ Write PR descriptions that read like a human wrote them - high-level overview, e
 
 ### Tone - match our ticket language
 - "we" language: "we added", "we block", "we already have"
-- Describe what happens, not what was coded: "we block fee creation on Rhino ROs" not "added ValidationError raise in _validate_rhino_no_fees"
-- Conversational but precise: "Rhino works by presence alone - no fees" not "The Rhino rental option does not utilize fee structures"
+- Describe what happens, not what was coded: "we block charge creation on metered add-ons" not "added ValidationError raise in _validate_rhino_no_fees"
+- Conversational but precise: "a usage source works by presence alone - it stores nothing" not "The usage source entity does not utilize storage structures"
 - Short sentences. No filler. No corporate-speak.
-- Reference domain concepts by name: "deposit eliminator", "SROItem", "carry-over" - same terms as our glossary
+- Reference your project's domain concepts by name - the same terms as our glossary
 
 ### What section - high-level only
 - Describe changes in terms of behavior: "we now block X", "we added Y capability"
@@ -44,13 +44,13 @@ Write PR descriptions that read like a human wrote them - high-level overview, e
 
 ### How was this tested
 - High-level: number of tests, what areas they cover
-- Call out non-obvious testing decisions: "we test at the validator level, not MITS level, because MITS already runs ADMIN_RULES"
+- Call out non-obvious testing decisions: "we test at the validator level, not the import level, because the importer already runs the same rules"
 - If there's a regression suite, mention it passed
 
 ### Additional Notes - only non-obvious stuff
 - ORM gotchas, migration notes, follow-up work needed
 - Skip if there's nothing surprising
-- Validation coverage matrix is useful when multiple entry points exist (admin, settings, MITS, bulk uploader)
+- A validation coverage matrix is useful when multiple entry points exist (admin, settings page, import, bulk upload)
 
 ### What to avoid
 - File-by-file changelogs

@@ -55,7 +55,7 @@ Show these as ordinary plan items so each is confirmed separately:
 
 ```
 [project local, ./.claude/skills/]
-  L2. archer-clean-code: add "ask before you restrict" (SHARED.md rule, currently missing)
+  L2. <lang>-clean-code: add "ask before you restrict" (SHARED.md rule, currently missing)
   L3. python-clean-code: refresh "Comments" - SHARED.md now leads with the allowlist
 ```
 

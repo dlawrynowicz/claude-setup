@@ -51,8 +51,8 @@ fi
 
 [ -z "$file_path" ] && exit 0
 case "$file_path" in
-  *.py)                      family="python"; skill="python-clean-code" ;;
-  *.ts|*.tsx|*.js|*.jsx)     family="frontend"; skill="archer-clean-code" ;;
+  *.py)                      family="python"; skill="the project's Python clean-code skill" ;;
+  *.ts|*.tsx|*.js|*.jsx)     family="frontend"; skill="the project's frontend clean-code skill" ;;
   *) exit 0 ;;
 esac
 
@@ -65,7 +65,7 @@ House comment style applies to this file (skills/SHARED.md, "House style"; also 
 - Branching on a domain case? Lead-in line, then one bullet per case, naming the case in domain
   words rather than the isinstance/type check. Not a prose paragraph.
 - Say "we", present tense. Not "the system", not passive.
-- Human word first, model name in "(i.e. ...)": "a new roommate (i.e. applicant role)".
+- Human word first, model name in "(i.e. ...)": "a new teammate (i.e. a seat)".
 - Quote a setting by its on-screen label, not its field name.
 - Say when you don't know. An honest gap beats an invented rationale.
 - Delete any comment that restates the symbol above it.

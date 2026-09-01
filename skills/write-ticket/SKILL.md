@@ -23,7 +23,7 @@ Write JIRA tickets that read like a human wrote them - user stories, conversatio
 
 ### Ticket-Specific Tone
 - Start with "As a [role], I want..." - who benefits and what they need
-- Describe current pain: "the applicant is blocked on...", "we failed to..."
+- Describe current pain: "the traveller is blocked at...", "we failed to..."
 - Use blockquote callouts for examples and important notes: `> **Example:**`, `> **Important:**`
 - Examples in description should use bullet points showing exact steps - not prose paragraphs
 
@@ -43,23 +43,23 @@ Write JIRA tickets that read like a human wrote them - user stories, conversatio
 
 ### Acceptance Test Format
 ```markdown
-#### Test 1: Allow a global late rent RO alongside a unit-specific late rent RO
+#### Test 1: Allow an account-wide fee alongside a region-specific fee
 
-**Given** a community with one active global late rent rental option "Late Rent - Global" (no layouts, no unit types, no legal entities)
+**Given** an account with one active account-wide onboarding fee "Onboarding - All" (no regions, no workspace types)
 
-**When** an admin creates a second active late rent rental option "Late Rent - Studio" configured for layout "Studio"
+**When** an admin creates a second active onboarding fee "Onboarding - EU" scoped to region "EU"
 
-**Then** the second rental option is saved successfully (because they differ in unit scope: one is global, the other is layout-specific)
+**Then** the second fee is saved successfully (because they differ in scope: one is account-wide, the other is region-specific)
 
 ---
 
-#### Test 2: Reject duplicate global late rent ROs in the same community
+#### Test 2: Reject a duplicate account-wide fee on the same account
 
-**Given** a community with one active global late rent rental option "Late Rent - Global"
+**Given** an account with one active account-wide onboarding fee "Onboarding - All"
 
-**When** an admin creates another global late rent rental option "Late Rent - Global 2" (same scope: no layouts, no unit types, no legal entities)
+**When** an admin creates another account-wide onboarding fee "Onboarding - All 2" (same scope: no regions, no workspace types)
 
-**Then** validation fails with "A global late rent rental option already exists" (because two global ROs of the same category in the same community would conflict)
+**Then** validation fails with "An account-wide onboarding fee already exists" (because two account-wide fees of the same category would conflict)
 ```
 Rules:
 - `#### Test N: Title` - h4 header so the test title stands out from Given/When/Then keywords. Each title must be unique and specific - "Item date updated on forward move" not "Test case for dates"
@@ -67,8 +67,8 @@ Rules:
 - Add `---` horizontal rule above the "Acceptance tests" header to visually separate requirements from tests
 - Separate individual tests with `---` horizontal rules for visual clarity
 - Each keyword starts a new paragraph - no bullets within test steps
-- Concrete data in every test ($500, layout "Studio", "Late Rent - Global")
-- Add parenthetical reasoning after Then clauses: "(because they differ in unit scope: one is global, the other is layout-specific)"
+- Concrete data in every test ($500, region "EU", "Onboarding - All")
+- Add parenthetical reasoning after Then clauses: "(because they differ in scope: one is account-wide, the other is region-specific)"
 - Keep Then + reasoning on the same line - no line break between the assertion and its parenthetical
 
 ### Grouping
@@ -85,7 +85,7 @@ Rules:
 ### Scope & Downstream Impact
 - Think about ALL dimensions of the problem - check the model for all scoping fields (layouts, unit types, legal entities, lease profiles, etc.)
 - Include downstream impact - if validation changes, what code uses these objects and needs updating?
-- Explicitly call out what's NOT in scope upfront (e.g. "Early termination rental options are not in the scope of this ticket") - list all affected categories at the top so the reader immediately knows the full scope
+- Explicitly call out what's NOT in scope upfront (e.g. "Cancellation charges are not in the scope of this ticket") - list all affected categories at the top so the reader immediately knows the full scope
 - Flag cleanup opportunities as bonus items (e.g. "remove duplicate validator")
 - Make clear decisions instead of open questions when the answer is derivable from the codebase
 - Add a Background section before requirements when context helps the developer
@@ -106,7 +106,7 @@ After writing, check each ticket for:
 - Include: test spec file location, fixture data needs, page object additions, test tags
 
 ### Language & Dates
-- Use domain language, not internal code paths - "when admin updates the rental option fee" NOT "cronjob path"; "when agent changes lease start date" NOT "view path"
+- Use domain language, not internal code paths - "when an admin updates the add-on price" NOT "cronjob path"; "when an admin changes the subscription start date" NOT "view path"
 - Test cases should use relative dates ("in 1 week", "in 2 weeks") so QA can execute them anytime - never absolute dates like "3/1/2026"
 - Describe triggers from the user's perspective - who does what in the UI
 

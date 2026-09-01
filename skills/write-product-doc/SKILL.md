@@ -55,7 +55,7 @@ Explanation with concrete example showing real instances.
 
 # Technical notes
 
-### <Topic> (e.g. Application fee, Holding deposit)
+### <Topic> (e.g. Signup fee, Deposit)
 
 How things work under the hood - model fields, code references,
 key logic details engineers need when implementing.
@@ -83,7 +83,7 @@ When multiple transaction types or scenarios have different behaviors, use a tab
 For complex conditional logic ("if X and Y, then Z") with multiple inputs and outcomes.
 
 ### 4. Data model explanation
-Walk through a concrete example with real instances - "if we have a Dog rental option with two fees, here are the instances that get created."
+Walk through a concrete example with real instances - "if we have a Pro plan with two add-ons, here are the records that get created."
 
 ### 5. Negative requirement
 Explicitly call out what we do NOT support, so engineers don't waste time investigating.
@@ -99,7 +99,7 @@ State the requirement in product language first, then a "Technically, it means..
 
 - Every requirement needs a Source - who confirmed it, when, and context
 - Format: `Confirmed by [name] during [event] on [date]` or `Requirements from this ticket: [link]`
-- JIRA ticket links: `https://nestiolistings.atlassian.net/browse/<TICKET-ID>`
+- JIRA ticket links: `<your-jira-host>/browse/<TICKET-ID>`
 - If confirmed verbally (standup, call), say so: "Confirmed during a call with the team January 14, 2026"
 - Sources create accountability - without them, requirements are just opinions
 

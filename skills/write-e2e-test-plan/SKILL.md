@@ -32,7 +32,7 @@ One paragraph summary of the feature - what it does, who it affects, where it sh
 ## Test data setup
 
 What needs to exist before testing:
-- Communities, units, rental options, lease profiles, etc.
+- Accounts, plans, add-ons, seats, etc. - whatever the feature reads
 - Specific configurations that enable the feature
 - Existing transactions in specific states
 

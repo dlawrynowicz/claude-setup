@@ -21,9 +21,9 @@ Write replies that read like a teammate explaining behavior - direct, factual, n
 
 ### Tone - same as our tickets and PRs
 - "we" language: "we filter", "we keep", "we only exclude"
-- Describe behavior as fact: "Rhino filters refundable deposits - non-refundable fees stay visible"
+- Describe behavior as fact: "a connected usage source prices metered add-ons - flat-rate add-ons stay visible"
 - Short sentences. No filler. No hedging.
-- Reference domain concepts by name: "deposit alternative", "SROItemFee", "leasing category"
+- Reference your project's domain concepts by their real names, not paraphrases
 - Don't over-explain - one clear sentence beats three cautious ones
 
 ### Structure

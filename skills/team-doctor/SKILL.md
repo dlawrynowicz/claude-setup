@@ -102,7 +102,7 @@ docs/:
   ✓ docs/features/ (2 features: workshop, team-setup-plugin)
 
 hookify rules:
-  ✓ .claude/hookify.funnel-terminology.local.md
+  ✓ .claude/hookify.terminology.local.md
   ✓ .claude/hookify.no-git-commit.local.md
 
 settings.local.json:

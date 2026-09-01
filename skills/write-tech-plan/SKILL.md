@@ -116,8 +116,8 @@ Test the proposal against actual production data. Table showing what happens tod
 - **Be opinionated** - tech plans recommend an approach. "We should use X because Y" not "We could use X or Y."
 - **Lead with the recommendation** - present the preferred approach first, then alternatives. Don't bury the lede.
 - **Quantify** - "affects 12,000 records", "adds ~200ms", "3 phases over 2 sprints." Vague = useless.
-- **Name the models** - tech plans are for engineers. Use `RentalOptionFee`, `SROItemFee`, not "the fee record."
-- **Flag unknowns as risks** - don't hide what you don't know. "We haven't confirmed if Yardi handles X" is better than silence.
+- **Name the models** - tech plans are for engineers. Use the real class names, not "the fee record."
+- **Flag unknowns as risks** - don't hide what you don't know. "We haven't confirmed whether the payment provider handles X" is better than silence.
 - **Concrete over abstract** - "We'll migrate 12,000 records in 3 batches" beats "We'll migrate the data."
 
 ## Formatting (JIRA-friendly)
