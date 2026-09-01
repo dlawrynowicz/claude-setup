@@ -42,4 +42,17 @@ esac
 python3 "${CLAUDE_PLUGIN_ROOT}/lib/wrap_comments.py" \
   "$file_path" --width "${WRAP_COMMENTS_WIDTH:-99}" >/dev/null 2>&1 || true
 
+# The wrapping above is mechanical, so it is applied. Deleting a comment is not, so it is reported.
+redundant=$(python3 "${CLAUDE_PLUGIN_ROOT}/lib/wrap_comments.py" \
+  "$file_path" --redundant 2>/dev/null || true)
+
+if [ -n "$redundant" ]; then
+  cat <<REPORT
+Redundant comments in $file_path (skills/SHARED.md, "Comments and docstrings"):
+$redundant
+Naming the predicate is the documentation. Delete the header, or if the name really needs a
+paragraph to explain, the name is wrong - rename it instead.
+REPORT
+fi
+
 exit 0

@@ -22,12 +22,35 @@ Or skip the wizard and smoke-test directly — type *"let's add a feature"*, `te
 
 | | inventory |
 |---|---|
-| **25 skills** | `brainstorm`, `plan`, `execute`, `debug`, `tdd`, `discipline-check`, `using-team-setup` (meta), `bootstrap-new-machine` (guided onboarding wizard), `team-doctor`, `team-curate`, `doc-feature`, `doc-capture`, `doc-adr`, `doc-audit`, `audit-memory`, `scratch` (mid-session notes), `recall` (search prior sessions), `glossary-check`, `update-docs`, `write-ticket`, `write-tech-plan`, `write-product-doc`, `write-pr-description`, `write-e2e-test-plan`, `reply-to-qa` *(plus `SHARED.md` — shared content, not a skill)* |
+| **26 skills** | `brainstorm`, `plan`, `execute`, `debug`, `tdd`, `discipline-check`, `harvest`, `using-team-setup` (meta), `bootstrap-new-machine` (guided onboarding wizard), `team-doctor`, `team-curate`, `doc-feature`, `doc-capture`, `doc-adr`, `doc-audit`, `audit-memory`, `scratch` (mid-session notes), `recall` (search prior sessions), `glossary-check`, `update-docs`, `write-ticket`, `write-tech-plan`, `write-product-doc`, `write-pr-description`, `write-e2e-test-plan`, `reply-to-qa` *(plus `SHARED.md` — shared content, not a skill)* |
 | **4 agents** | `architect` (read-only design), `explore` (read-only investigation), `planner` (write plans, dispatched via `context: fork` from `plan` skill), `team-reviewer` (discipline-check verdict) |
-| **5 handlers across 4 hook events** | `SessionStart` → `session-start.sh` · `UserPromptSubmit` → `user-prompt-submit.sh` · `PreToolUse:Bash` → `scan-destructive.sh` · `PostToolUse:Write|Edit` → `review-required.sh` + `capture-nudge.sh` |
+| **7 handlers across 4 hook events** | `SessionStart` → `session-start.sh` · `UserPromptSubmit` → `user-prompt-submit.sh` · `PreToolUse:Bash` → `scan-destructive.sh` · `PostToolUse:Write\|Edit\|Bash` → `wrap-comments.sh` + `review-required.sh` + `capture-nudge.sh` + `code-style-reminder.sh` |
 | **4 templates** | `CLAUDE.md.global.template`, `CLAUDE.md.project.template`, `glossary.md.template`, `settings.json.template` |
 | **lib/triggers.sh** | canonical trigger patterns — single source of truth for what fires which skill |
 | **setup/** | OS-level integration (run once per machine): `bootstrap.sh` (pre-flight) · `install.sh` (statusline + CLAUDE.md + settings.json merge) · `statusline.mjs` + launcher · `demo-tarballs.sh` (workshop tool). See [setup/README.md](setup/README.md). |
+
+## What this changes about your day
+
+You do not invoke any of this. You describe work the way you normally would; the plugin decides what fires. Three things happen to you.
+
+**1. A skill loads before Claude starts.** Say *"add a feature"* and `brainstorm` runs first - Claude asks one question at a time and writes a design doc before touching code. Say *"this test is failing"* and `debug` runs first - Claude is not allowed to propose a fix until it has stated a root cause. This is the biggest behaviour change: **Claude stops answering immediately and starts asking.** If you already know what you want, say so and it moves on.
+
+**2. Writing code triggers reminders you did not ask for.** Every file write is inspected:
+
+| what fires | when | what you see |
+|---|---|---|
+| `code-style-reminder` | first code write of the session, per language | house comment rules, once |
+| `wrap-comments` | every code write | nothing - it rewraps comments in place, like a formatter |
+| `review-required` | a write of 50+ lines | Claude is **blocked** until it runs `discipline-check` |
+| `capture-nudge` | a write of 10+ lines | a suggestion to record what changed |
+
+`review-required` is the only one that stops the turn. `REVIEW_THRESHOLD=0` disables it; `CODE_STYLE_REMINDER_OFF=1` and `WRAP_COMMENTS_OFF=1` disable theirs.
+
+**3. Review happens before you see the code, not after.** `discipline-check` dispatches a reviewer agent in a separate context, so the model that wrote the code is not the model approving it. It reports findings; it never auto-fixes.
+
+**What it does not do:** commit, push, edit your settings, or change code without telling you. Everything is a suggestion except `review-required`, and that only blocks Claude, never you.
+
+**If it gets in the way:** every hook has an off switch (above), skills can be overridden by dropping a same-named skill in `~/.claude/skills/`, and `lib/triggers.sh` controls what auto-fires. Turning a thing off is a supported outcome, not a failure.
 
 ## How skills auto-fire
 
@@ -67,6 +90,7 @@ Pre-flight (outside Claude): `bash setup/bootstrap.sh` from the cloned repo veri
 | bug, test failure, unexpected behavior | `team-setup:debug` |
 | implementing — test first | `team-setup:tdd` |
 | review my changes | `team-setup:discipline-check` → dispatches `team-reviewer` agent |
+| review landed, don't repeat the mistake | `team-setup:harvest` → turns a finding into a rule or a hook fix |
 | explore an unfamiliar codebase area | `explore` agent *(Claude dispatches via Agent tool — not a slash command)* |
 | design a new feature architecture | `architect` agent *(Claude dispatches via Agent tool — not a slash command)* |
 | scaffold feature docs | `team-setup:doc-feature <name>` |
@@ -131,7 +155,7 @@ Full design rationale lives in the parent workshop project (the `claude-learning
 
 ## Status
 
-Stable. 22 skills + 4 agents + 5 hooks production-tested in the user's daily workflow. Plan revisions and case study in the parent `claude-learnings` repo.
+Stable. 26 skills + 4 agents + 7 hook handlers production-tested in the user's daily workflow. Plan revisions and case study in the parent `claude-learnings` repo.
 
 ## License
 

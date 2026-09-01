@@ -2,7 +2,7 @@
 
 Real examples from Funnel's product documentation. Use these for tone and style reference when writing new product docs.
 
-Each example is annotated with **why it works** — use the pattern, not just the content.
+Each example is annotated with **why it works** - use the pattern, not just the content.
 
 ---
 
@@ -74,7 +74,7 @@ When the same concept varies across 3+ transaction types, a matrix replaces a wa
 and Reconciliation all preserve the effective amount from the lease as-is.
 ```
 
-**Why it works:** Bold marks surprising values. Footnotes explain non-obvious terms. A reviewer can scan one row to see how a behavior differs across all 6 types — no need to read 6 separate paragraphs.
+**Why it works:** Bold marks surprising values. Footnotes explain non-obvious terms. A reviewer can scan one row to see how a behavior differs across all 6 types - no need to read 6 separate paragraphs.
 
 ---
 
@@ -112,7 +112,7 @@ When there's a fallback chain or priority order, use a numbered list. Each step 
         Confirmed November 19, 2025 by Max (in a call with Richard and William).
 ```
 
-**Why it works:** The numbered list communicates priority — step 1 wins over step 2. The source traces back to a specific call with specific people.
+**Why it works:** The numbered list communicates priority - step 1 wins over step 2. The source traces back to a specific call with specific people.
 
 ---
 
@@ -142,7 +142,7 @@ Walk through a real scenario showing what instances get created. Use a specific 
 
 ## Pattern 7: Verbal Source Attribution
 
-When requirements come from standups, calls, or Slack — not tickets — say who, when, and where.
+When requirements come from standups, calls, or Slack - not tickets - say who, when, and where.
 
 ```
 - When the lease start date is updated on an application, and the unit is already reserved,
@@ -163,7 +163,7 @@ When different transaction types exclude different things, a compact table beats
 | Type | Excluded Categories |
 |------|---------------------|
 | Renewal | Holding Deposit, Transfer Fee |
-| Transfer | _(none — carries all; Transfer Fee added fresh)_ |
+| Transfer | _(none - carries all; Transfer Fee added fresh)_ |
 | MLC | Holding Deposit, Transfer Fee |
 | Vacate | Holding Deposit, Application Fee, Transfer Fee |
 | Reconciliation | _(none)_ |

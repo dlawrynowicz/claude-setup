@@ -1,6 +1,6 @@
 ---
 name: update-docs
-description: Update local docs to reflect recent work — captures domain knowledge discovered during feature development. Use after completing feature work, when user says "update docs", or when domain knowledge needs to be recorded.
+description: Update local docs to reflect recent work - captures domain knowledge discovered during feature development. Use after completing feature work, when user says "update docs", or when domain knowledge needs to be recorded.
 ---
 
 # Update Docs
@@ -9,18 +9,18 @@ Capture domain knowledge discovered during feature work into local docs. These a
 
 ## Inputs
 
-- `$ARGUMENTS` — optional: specific topic, branch, or area to update. If empty, infer from current branch and recent conversation.
+- `$ARGUMENTS` - optional: specific topic, branch, or area to update. If empty, infer from current branch and recent conversation.
 
 ## Critical Rules
 
-1. **NEVER delete existing content** — docs accumulate knowledge across branches. Content from other features MUST be preserved even if unrelated to current work.
-2. **Additive updates only** — add new sections, update existing ones, correct errors. Never regenerate from scratch.
-3. **Update, don't duplicate** — if a topic is already documented, update that section. Don't create new docs for existing topics.
-4. **Branch-agnostic** — local docs persist across branches. Knowledge from any branch belongs here.
+1. **NEVER delete existing content** - docs accumulate knowledge across branches. Content from other features MUST be preserved even if unrelated to current work.
+2. **Additive updates only** - add new sections, update existing ones, correct errors. Never regenerate from scratch.
+3. **Update, don't duplicate** - if a topic is already documented, update that section. Don't create new docs for existing topics.
+4. **Branch-agnostic** - local docs persist across branches. Knowledge from any branch belongs here.
 
 ## Process
 
-1. Read shared rules: [SHARED.md](../SHARED.md) — tone, terminology
+1. Read shared rules: [SHARED.md](../SHARED.md) - tone, terminology
 2. If a glossary exists, read it
 3. Identify what was learned in this session:
    - Check git diff for what changed on the current branch
@@ -28,7 +28,7 @@ Capture domain knowledge discovered during feature work into local docs. These a
    - Check if any new terminology was introduced
 4. For each piece of new knowledge, find the right home in existing docs or create a new doc ONLY if it doesn't fit in any existing one
 5. Read the target doc(s) fully before editing
-6. Make the updates — preserving all existing content
+6. Make the updates - preserving all existing content
 7. Verify no content was lost (check line counts, section headers)
 
 ## What to Capture
@@ -44,13 +44,13 @@ Capture domain knowledge discovered during feature work into local docs. These a
 
 ## Writing Rules
 
-Follow SHARED.md "Documentation voice" — describe what the system does, no reader instructions, no open questions about behavior we verified, no meta-narration. On top of that:
+Follow SHARED.md "Documentation voice" - describe what the system does, no reader instructions, no open questions about behavior we verified, no meta-narration. On top of that:
 
-- Every requirement needs a source — who confirmed it, when, what context
+- Every requirement needs a source - who confirmed it, when, what context
 - Use matrices for cross-transaction-type comparisons
 - Use requirement-with-example pattern for non-obvious behavior
-- Mark unconfirmed requirements with TODO — that's a known gap, not hedging about code we already read
-- Keep docs compact — prefer tables and matrices over paragraphs
+- Mark unconfirmed requirements with TODO - that's a known gap, not hedging about code we already read
+- Keep docs compact - prefer tables and matrices over paragraphs
 
 ## After Updating
 

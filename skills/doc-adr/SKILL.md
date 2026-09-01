@@ -60,7 +60,7 @@ supersedes: NNNN-other-adr.md   # optional, when this replaces an older ADR
 (what changes as a result? what now becomes easier or harder?)
 ```
 
-Keep all three sections tight. ADRs are read by future-you and teammates — extreme short, conversational, "we" voice.
+Keep all three sections tight. ADRs are read by future-you and teammates - extreme short, conversational, "we" voice.
 
 ## After writing
 
@@ -73,4 +73,4 @@ Keep all three sections tight. ADRs are read by future-you and teammates — ext
 - **ADR:** a decision worth referencing later. Has rationale + consequences. Numbered.
 - **Note:** an observation, scratch, or in-progress thinking. Append-only in `notes.md`.
 
-If unsure, default to a note — promotion to ADR is cheap; demoting an ADR is awkward.
+If unsure, default to a note - promotion to ADR is cheap; demoting an ADR is awkward.

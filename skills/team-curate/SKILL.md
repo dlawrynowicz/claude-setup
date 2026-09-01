@@ -1,6 +1,6 @@
 ---
 name: team-curate
-description: Interactive setup wizard. Audits `~/.claude/` and current project against the team baseline (via doctor checks), proposes changes, asks confirmation per item, applies on approval. Idempotent — safe to re-run. Per scope: global / project shared / project local. Includes optional plugin pruning. Use when setting up a new machine, applying team standards, or reconciling drift.
+description: Interactive setup wizard. Audits `~/.claude/` and current project against the team baseline (via doctor checks), proposes changes, asks confirmation per item, applies on approval. Idempotent - safe to re-run. Per scope: global / project shared / project local. Includes optional plugin pruning. Use when setting up a new machine, applying team standards, or reconciling drift.
 ---
 
 # team-curate
@@ -38,13 +38,33 @@ For each gap the audit found, propose a specific change. Group by scope:
 
 ### Project local (`./.claude/`)
 - Missing `settings.local.json` → offer to create empty (untracked; user owns content)
+- Project clean-code skills out of date with `SHARED.md` → offer to refresh (see below)
+
+### Refreshing project clean-code skills
+
+Project-local skills (`.claude/skills/*-clean-code/SKILL.md`) restate the universal rules from [`../SHARED.md`](../SHARED.md) in the project's own language and examples. That duplication is deliberate - a skill is read standalone, so it has to carry the rule - and it means the copies drift whenever `SHARED.md` changes.
+
+For each `.claude/skills/*/SKILL.md` whose description mentions code quality or code review:
+
+1. Read the skill and `SHARED.md`.
+2. For each universal rule in `SHARED.md`'s "Code writing conventions", check whether the skill covers it. Cover means the rule is present in some form, not that the wording matches.
+3. Propose one plan entry per missing rule, phrased in the project's language with an example from that project's code. Never paste the `SHARED.md` wording in - a generic example in a project skill is the thing that makes it get skimmed.
+4. Leave project-specific rules alone. They are the reason the skill exists.
+
+Show these as ordinary plan items so each is confirmed separately:
+
+```
+[project local, ./.claude/skills/]
+  L2. archer-clean-code: add "ask before you restrict" (SHARED.md rule, currently missing)
+  L3. python-clean-code: refresh "Comments" - SHARED.md now leads with the allowlist
+```
 
 ## Show the plan
 
 Present as a numbered list grouped by scope. Use this exact format:
 
 ```
-PLAN — to apply
+PLAN - to apply
 
 [global, ~/.claude/]
   G1. Append "Plugin philosophy" section to CLAUDE.md (currently missing)
@@ -121,5 +141,5 @@ When the user approves disabling drop-candidate plugins:
 - Auto-disable plugins without confirmation. Always present drop candidates as a discrete item the user approves.
 - Overwrite without backup.
 - Apply without confirmation, except when user explicitly said "apply all".
-- Modify the *content* of `settings.local.json` — that scope is the user's. Only offer to *create* it empty.
-- Scaffold a feature folder unprompted — that's `/team-setup:doc-feature` instead.
+- Modify the *content* of `settings.local.json` - that scope is the user's. Only offer to *create* it empty.
+- Scaffold a feature folder unprompted - that's `/team-setup:doc-feature` instead.

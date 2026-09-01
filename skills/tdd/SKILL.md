@@ -1,13 +1,13 @@
 ---
 name: tdd
-description: MUST use when implementing any feature or bugfix, BEFORE writing implementation code. Test first, watch it fail, write minimal code to pass — Iron Law: no production code without a failing test first. Rigid recipe; per ADR 0002, project-level TDD is SOFT-tier but invoking THIS skill commits to the strict cycle. Vendored from `superpowers:test-driven-development` v5.1.0.
+description: MUST use when implementing any feature or bugfix, BEFORE writing implementation code. Test first, watch it fail, write minimal code to pass - Iron Law: no production code without a failing test first. Rigid recipe; per ADR 0002, project-level TDD is SOFT-tier but invoking THIS skill commits to the strict cycle. Vendored from `superpowers:test-driven-development` v5.1.0.
 ---
 
 # tdd
 
 Write the test first. Watch it fail. Write minimal code to pass.
 
-**Vendored from `superpowers:test-driven-development` v5.1.0** — adapted for team-setup voice + ecosystem; rigid recipe preserved.
+**Vendored from `superpowers:test-driven-development` v5.1.0** - adapted for team-setup voice + ecosystem; rigid recipe preserved.
 
 **Core principle:** if you didn't watch the test fail, you don't know if it tests the right thing.
 
@@ -28,12 +28,12 @@ Write the test first. Watch it fail. Write minimal code to pass.
 
 Thinking "skip TDD just this once"? Stop. That's rationalization.
 
-Per [ADR 0002 layered enforcement](../../docs/decisions/0002-layered-enforcement.md), TDD is SOFT-tier at the project level — the project doesn't auto-block non-TDD code. But invoking **this** skill commits you to the rigid recipe.
+Per [ADR 0002 layered enforcement](../../../docs/decisions/0002-layered-enforcement.md), TDD is SOFT-tier at the project level - the project doesn't auto-block non-TDD code. But invoking **this** skill commits you to the rigid recipe.
 
 ## Required preparation
 
 1. Read [`../SHARED.md`](../SHARED.md) for tone + ecosystem.
-2. Read [ADR 0002 layered enforcement](../../docs/decisions/0002-layered-enforcement.md).
+2. Read [ADR 0002 layered enforcement](../../../docs/decisions/0002-layered-enforcement.md).
 3. Run `git branch --show-current` for context.
 
 ## The Iron Law
@@ -61,9 +61,11 @@ RED (write failing test) → verify fails correctly
   → next test
 ```
 
-### RED — write failing test
+### RED - write failing test
 
 Write one minimal test showing what should happen.
+
+**Before writing a test that asserts something is rejected, stop and ask.** A test named `test_..._is_rejected` bakes a restriction into the suite, and from then on the guard looks correct because a test demands it. Confirm the requirement is a system constraint rather than a process expectation, and name which existing flow the guard breaks, before the RED test exists. `SHARED.md` ("Implementing from a ticket: ask before you restrict") has the full rule; `execute` has the same gate.
 
 **Good:**
 ```typescript
@@ -93,7 +95,7 @@ Vague name, tests mock not code.
 
 **Requirements:** one behavior · clear name · real code (no mocks unless unavoidable).
 
-### Verify RED — watch it fail
+### Verify RED - watch it fail
 
 **MANDATORY. Never skip.** Run the test. Confirm:
 
@@ -104,11 +106,11 @@ Vague name, tests mock not code.
 **Test passes?** You're testing existing behavior. Fix the test.
 **Test errors?** Fix the error, re-run until it fails correctly.
 
-### GREEN — minimal code
+### GREEN - minimal code
 
 Simplest code to pass the test. **Don't add features, refactor other code, or "improve" beyond the test.**
 
-### Verify GREEN — watch it pass
+### Verify GREEN - watch it pass
 
 **MANDATORY.** Run the test. Confirm:
 
@@ -119,7 +121,7 @@ Simplest code to pass the test. **Don't add features, refactor other code, or "i
 **Test fails?** Fix code, not test.
 **Other tests fail?** Fix now.
 
-### REFACTOR — clean up
+### REFACTOR - clean up
 
 After green only:
 - Remove duplication
@@ -147,13 +149,13 @@ Next failing test for next feature.
 | "I'll write tests after" | Tests passing immediately prove nothing. Might test wrong thing or implementation, not behavior. |
 | "I already manually tested" | Manual = ad-hoc, no record, can't re-run. |
 | "Deleting X hours is wasteful" | Sunk cost fallacy. Keeping unverified code is technical debt. |
-| "TDD is dogmatic, I'm pragmatic" | TDD **is** pragmatic — finds bugs before commit, prevents regressions, documents behavior, enables refactoring. |
+| "TDD is dogmatic, I'm pragmatic" | TDD **is** pragmatic - finds bugs before commit, prevents regressions, documents behavior, enables refactoring. |
 | "Tests after = same goal" | Tests-after = "what does this do?" Tests-first = "what should this do?" |
 | "Too simple to test" | Simple code breaks. Test takes 30 seconds. |
 | "Test hard = design unclear" | Listen to the test. Hard to test = hard to use. |
 | "Existing code has no tests" | You're improving it. Add tests for existing code. |
 
-## Red flags — STOP and start over
+## Red flags - STOP and start over
 
 - Code before test
 - Test after implementation
@@ -197,7 +199,7 @@ For systematic debugging, hand off to `/team-setup:debug` after a TDD-driven fix
 
 ## After substantial TDD work
 
-Per [ADR 0002](../../docs/decisions/0002-layered-enforcement.md), Write/Edit ≥50 lines triggers `review-required` (HARD-tier). Run `/team-setup:discipline-check` to dispatch `team-reviewer` for a final pass — TDD coverage is one of the things it checks.
+Per [ADR 0002](../../../docs/decisions/0002-layered-enforcement.md), Write/Edit ≥50 lines triggers `review-required` (HARD-tier). Run `/team-setup:discipline-check` to dispatch `team-reviewer` for a final pass - TDD coverage is one of the things it checks.
 
 ## Final rule
 
@@ -211,5 +213,5 @@ No exceptions without your human partner's permission.
 ## Don't
 
 - Skip the verify-RED step. It's the proof that the test actually tests the thing.
-- Keep code "as reference" — that's testing after, with extra steps.
+- Keep code "as reference" - that's testing after, with extra steps.
 - Soften the Iron Law because the project's overall TDD policy is SOFT (ADR 0002). The project tolerates non-TDD work; THIS skill, when invoked, doesn't.

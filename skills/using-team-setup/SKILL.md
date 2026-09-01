@@ -1,15 +1,15 @@
 ---
 name: using-team-setup
-description: MUST use when starting any conversation — establishes how to find and invoke team-setup skills before any response, including clarifying questions. If you think there is even a 1% chance a team-setup skill applies to what you're doing, you ABSOLUTELY MUST invoke it via the Skill tool BEFORE doing the work.
+description: MUST use when starting any conversation - establishes how to find and invoke team-setup skills before any response, including clarifying questions. If you think there is even a 1% chance a team-setup skill applies to what you're doing, you ABSOLUTELY MUST invoke it via the Skill tool BEFORE doing the work.
 ---
 
 <SUBAGENT-STOP>
-If you were dispatched as a subagent (your context begins with an agent system prompt — e.g. "You are a code reviewer...", "You are a senior software architect..."), skip this skill. The agent context is already focused, and the meta-skill would cause recursive overhead.
+If you were dispatched as a subagent (your context begins with an agent system prompt - e.g. "You are a code reviewer...", "You are a senior software architect..."), skip this skill. The agent context is already focused, and the meta-skill would cause recursive overhead.
 </SUBAGENT-STOP>
 
 # using-team-setup
 
-**Vendored from `superpowers:using-superpowers`** — adapted as the meta-trigger for the team-setup skill ecosystem. Mirrors the upstream pattern of forcing skill invocation through imperative framing. This is the load-bearing piece that makes individual team-setup skills actually fire instead of Claude defaulting to "explore first."
+**Vendored from `superpowers:using-superpowers`** - adapted as the meta-trigger for the team-setup skill ecosystem. Mirrors the upstream pattern of forcing skill invocation through imperative framing. This is the load-bearing piece that makes individual team-setup skills actually fire instead of Claude defaulting to "explore first."
 
 <EXTREMELY-IMPORTANT>
 If you think there is even a 1% chance a team-setup skill applies to what you are doing, you ABSOLUTELY MUST invoke the skill.
@@ -23,15 +23,15 @@ This is not negotiable. This is not optional. You cannot rationalize your way ou
 
 team-setup skills override default Claude Code behavior, but **user instructions always take precedence**:
 
-1. **User's explicit instructions** (`CLAUDE.md`, `AGENTS.md`, direct requests) — highest priority
-2. **team-setup skills** — override default system behavior where they conflict
-3. **Default Claude Code behavior** — lowest priority
+1. **User's explicit instructions** (`CLAUDE.md`, `AGENTS.md`, direct requests) - highest priority
+2. **team-setup skills** - override default system behavior where they conflict
+3. **Default Claude Code behavior** - lowest priority
 
 If `CLAUDE.md` says "don't use TDD" and a team-setup skill says "always use TDD," follow the user's instructions. The user is in control.
 
 ## How to access skills
 
-Use the `Skill` tool. When you invoke a skill, its content is loaded and presented to you — follow it directly. Never use the Read tool on skill files.
+Use the `Skill` tool. When you invoke a skill, its content is loaded and presented to you - follow it directly. Never use the Read tool on skill files.
 
 ## When to invoke
 
@@ -57,6 +57,7 @@ Match user intent to skill:
 | Implementing any feature or bugfix (TDD cycle) | `team-setup:tdd` |
 | Bug, test failure, unexpected behavior, debugging | `team-setup:debug` |
 | Reviewing code against TDD/DRY/SOLID/security | `team-setup:discipline-check` skill (which dispatches the `team-reviewer` agent) |
+| Turning a review finding or correction into a lasting rule | `team-setup:harvest` |
 | Exploring an unfamiliar codebase area | `team-setup:explore` agent (dispatch via Agent tool) |
 | Designing a new feature architecture | `team-setup:architect` agent (dispatch via Agent tool) |
 | Capturing session work into docs | `team-setup:doc-capture` |
@@ -77,7 +78,7 @@ Match user intent to skill:
 
 ## Red flags
 
-These thoughts mean STOP — you're rationalizing:
+These thoughts mean STOP - you're rationalizing:
 
 | Thought | Reality |
 |---|---|
@@ -98,9 +99,9 @@ These thoughts mean STOP — you're rationalizing:
 
 When multiple skills could apply, use this order:
 
-1. **Process skills first** (`brainstorm`, `debug`) — these determine HOW to approach the task
-2. **Implementation skills second** (`execute`, `tdd`) — these guide execution
-3. **Capture skills last** (`doc-capture`, `doc-adr`) — these record after the fact
+1. **Process skills first** (`brainstorm`, `debug`) - these determine HOW to approach the task
+2. **Implementation skills second** (`execute`, `tdd`) - these guide execution
+3. **Capture skills last** (`doc-capture`, `doc-adr`) - these record after the fact
 
 - "Let's build X" → `brainstorm` first, then `plan`, then `execute`.
 - "Fix this bug" → `debug` first, then `tdd`-driven fix, then `discipline-check`.
@@ -110,13 +111,13 @@ When multiple skills could apply, use this order:
 
 **Rigid** (`team-setup:tdd`, `team-setup:debug`): follow exactly. Don't adapt away discipline. These skills self-declare as rigid in their descriptions ("rigid recipe", "Iron Law").
 
-**Flexible** (`team-setup:brainstorm`, `team-setup:plan`, `team-setup:execute`): adapt principles to context — but only where the skill explicitly invites adaptation.
+**Flexible** (`team-setup:brainstorm`, `team-setup:plan`, `team-setup:execute`): adapt principles to context - but only where the skill explicitly invites adaptation.
 
 When in doubt, default to following the skill body exactly. Skills tell you when adaptation is appropriate.
 
 ## Skill execution mode
 
-Most skills run inline on the main thread. `team-setup:plan` runs in a forked subagent (`team-setup:planner`) per [ADR 0006](../../docs/decisions/0006-skill-execution-mode.md) and Anthropic's [`context: fork`](https://code.claude.com/docs/en/skills#run-skills-in-a-subagent) pattern — the skill body becomes the agent prompt; the agent writes the plan in isolation and returns a summary. Backgroundable, doesn't bloat main-thread context. Interactive skills (`brainstorm`, `tdd`, `execute`, `debug`) stay inline because they need live user dialogue + tool approvals.
+Most skills run inline on the main thread. `team-setup:plan` runs in a forked subagent (`team-setup:planner`) per [ADR 0006](../../../docs/decisions/0006-skill-execution-mode.md) and Anthropic's [`context: fork`](https://code.claude.com/docs/en/skills#run-skills-in-a-subagent) pattern - the skill body becomes the agent prompt; the agent writes the plan in isolation and returns a summary. Backgroundable, doesn't bloat main-thread context. Interactive skills (`brainstorm`, `tdd`, `execute`, `debug`) stay inline because they need live user dialogue + tool approvals.
 
 ## User instructions
 

@@ -6,30 +6,30 @@ Real examples from Funnel's JIRA. Use these for tone/style reference.
 
 ## Epic Example (condensed)
 
-An epic starts with Goal, What is X, How it works, What it looks like — then tickets.
+An epic starts with Goal, What is X, How it works, What it looks like - then tickets.
 
 ```
 # Epic: Rhino/Jetty Deposit Alternative Integration
 
-> **Goal**: Allow communities to offer Rhino as a deposit alternative — when Rhino is on
+> **Goal**: Allow communities to offer Rhino as a deposit alternative - when Rhino is on
 > a lease, deposit fees are filtered from the resident's charges and totals.
 
 ## What is Rhino?
 
 Rhino is an external deposit alternative provider. Instead of paying a security deposit
 upfront, residents enroll in Rhino and Rhino covers the deposit for them. From our
-perspective, Rhino is a rental option that works by presence alone — it has no fees. When
+perspective, Rhino is a rental option that works by presence alone - it has no fees. When
 it's on a transaction, deposit fees are completely filtered from charges and display.
 
 ## How it works
 
-- **No RO fees** — Rhino RO has zero RentalOptionFees. Its presence is what matters.
-- **No fee manipulation** — deposit fees stay at their actual amounts in the database.
-  We don't zero them — we filter them from totals and display when Rhino is present.
-- **No snapshot/restore** — since fees aren't modified, removing Rhino just stops the
+- **No RO fees** - Rhino RO has zero RentalOptionFees. Its presence is what matters.
+- **No fee manipulation** - deposit fees stay at their actual amounts in the database.
+  We don't zero them - we filter them from totals and display when Rhino is present.
+- **No snapshot/restore** - since fees aren't modified, removing Rhino just stops the
   filtering. The original deposit amounts are already there.
-- **Carry-over just works** — Rhino SRO carries over like any other SRO.
-- **Price update protection** — deposits covered by Rhino should not receive scheduled
+- **Carry-over just works** - Rhino SRO carries over like any other SRO.
+- **Price update protection** - deposits covered by Rhino should not receive scheduled
   price updates.
 
 ## What it looks like for agents
@@ -47,7 +47,7 @@ reappear. A blue banner indicates Rhino is active.
 
 ### Example 1: MLC date alignment (gold standard)
 
-This ticket demonstrates the ideal format — clear user story, bulleted example in description, blockquote callouts for context, h4 test titles with bold Given/When/Then, horizontal rules between tests, parenthetical reasoning, and a product-facing open question.
+This ticket demonstrates the ideal format - clear user story, bulleted example in description, blockquote callouts for context, h4 test titles with bold Given/When/Then, horizontal rules between tests, parenthetical reasoning, and a product-facing open question.
 
 ```
 # Update rental option item dates when lease start date changes in MLC
@@ -58,9 +58,9 @@ As an agent when starting an MLC, I want rental option items to stay in sync wit
 
 ## Description
 
-When an agent changes the lease start date during an MLC, existing rental option items keep their original start date from when they were first added. If the lease start moves to the future, older items end up before the new lease start — making them invisible in the pricing breakdown, Deposits & Fees modal, and guest card.
+When an agent changes the lease start date during an MLC, existing rental option items keep their original start date from when they were first added. If the lease start moves to the future, older items end up before the new lease start - making them invisible in the pricing breakdown, Deposits & Fees modal, and guest card.
 
-> **Why carried-over items with past dates need updating:** The pricing breakdown, Deposits & Fees modal, and guest card filter items by the lease's date range. When the lease start moves to the future (e.g., February to March), items that were valid at the old start date now fall before the new lease start. The system treats them as not belonging to this lease period and hides them — even though the fee was legitimately part of the lease.
+> **Why carried-over items with past dates need updating:** The pricing breakdown, Deposits & Fees modal, and guest card filter items by the lease's date range. When the lease start moves to the future (e.g., February to March), items that were valid at the old start date now fall before the new lease start. The system treats them as not belonging to this lease period and hides them - even though the fee was legitimately part of the lease.
 
 > **Example:**
 > - A lease starts in February with a wine cooler
@@ -75,10 +75,10 @@ Transfers already handle this by resetting item dates during carry-over. MLCs ha
 ## Requirements
 
 - When the lease start date changes during an MLC, update all existing rental option item start dates on the current quote to `max(new_lease_start, item.start_date)`
-  - This ensures no item starts before the lease — items at or after the new start keep their date, items before it get updated to the new start
+  - This ensures no item starts before the lease - items at or after the new start keep their date, items before it get updated to the new start
 - Item fee start dates should sync automatically via the existing save-time sync
-- Only apply to the current MLC quote's items — do not touch historical/completed transaction items
-- This should happen when lease terms are saved, not at MLC completion — so the pricing breakdown reflects the correct dates immediately
+- Only apply to the current MLC quote's items - do not touch historical/completed transaction items
+- This should happen when lease terms are saved, not at MLC completion - so the pricing breakdown reflects the correct dates immediately
 
 > **Important:** This only applies to MLCs. Applications, transfers, and renewals already handle dates correctly.
 
@@ -128,7 +128,7 @@ Transfers already handle this by resetting item dates during carry-over. MLCs ha
 
 ## Open questions
 
-- **Confirm with Product:** If a rentable item was scheduled to start in the future (e.g., wine cooler starting Jun 1st) and the lease start date changes from Feb 20th to Mar 15th — should the wine cooler keep its Jun 1st start date, or should it also move? Our assumption is to leave future-dated items as-is and only update items that fall before the new lease start.
+- **Confirm with Product:** If a rentable item was scheduled to start in the future (e.g., wine cooler starting Jun 1st) and the lease start date changes from Feb 20th to Mar 15th - should the wine cooler keep its Jun 1st start date, or should it also move? Our assumption is to leave future-dated items as-is and only update items that fall before the new lease start.
 ```
 
 **Why this ticket works:**

@@ -1,6 +1,6 @@
 ---
 name: scratch
-description: Mid-session scratch notes — use to capture working thoughts, intermediate findings, or to-dos that aren't worth a memory file but are too important to lose between turns. Invoke when the user says "note that", "save this", or you're about to lose state across a long workflow.
+description: Mid-session scratch notes - use to capture working thoughts, intermediate findings, or to-dos that aren't worth a memory file but are too important to lose between turns. Invoke when the user says "note that", "save this", or you're about to lose state across a long workflow.
 ---
 
 You are writing a mid-session scratch note.
@@ -8,9 +8,9 @@ You are writing a mid-session scratch note.
 Append the note to `.claude-learnings/scratch.md` in the current project root (create the file if it doesn't exist). Format:
 
 ```
-## YYYY-MM-DD HH:MM — <one-line summary>
+## YYYY-MM-DD HH:MM - <one-line summary>
 
-<note body — 1–5 lines>
+<note body - 1–5 lines>
 ```
 
 Rules:

@@ -24,23 +24,23 @@ Use the `Agent` tool to spawn `team-reviewer` (defined in this plugin's `agents/
   - reference to relevant ADRs (esp. ADR 0002 for layered enforcement)
 - Wait for the agent's report.
 
-The agent runs in isolated context — its grep / read calls don't pollute main context.
+The agent runs in isolated context - its grep / read calls don't pollute main context.
 
 ## Summarize for the user
 
 The agent returns findings in a structured format. Restate them as:
 
 ```
-DISCIPLINE-CHECK — <what was reviewed>
+DISCIPLINE-CHECK - <what was reviewed>
 
 ✓ Passes:
   - <list>
 
 ⚠ Concerns:
-  - <file>:<line> — <concern> (severity)
+  - <file>:<line> - <concern> (severity)
 
 ✗ Violations:
-  - <file>:<line> — <violation> (severity)
+  - <file>:<line> - <violation> (severity)
 
 Recommendation: (1-2 sentences on highest priority)
 ```

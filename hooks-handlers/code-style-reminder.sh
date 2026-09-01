@@ -8,6 +8,10 @@
 # trigger, so the rules were being missed for whole sessions and only caught later in review.
 # This fires on the write itself.
 #
+# Claude edits files through Bash as often as through Write/Edit (heredocs, sed -i, small python
+# scripts), so this matches Bash too. A session that edited 15 files through Bash used to get no
+# reminder at all.
+#
 # Once per session per language family, so it does not become noise. Set $CODE_STYLE_REMINDER_OFF=1
 # to disable. Reads stdin JSON (PostToolUse event); writes reminder text on stdout.
 
@@ -19,16 +23,30 @@ input=$(cat)
 
 tool=$(echo "$input" | grep -oE '"tool_name":"[^"]+"' | head -1 | cut -d'"' -f4)
 case "$tool" in
-  Write|Edit) ;;
+  Write|Edit|Bash) ;;
   *) exit 0 ;;
 esac
 
 if command -v jq >/dev/null 2>&1; then
   file_path=$(echo "$input" | jq -r '.tool_input.file_path // empty')
+  command_text=$(echo "$input" | jq -r '.tool_input.command // empty')
   session=$(echo "$input" | jq -r '.session_id // empty')
 else
   file_path=$(echo "$input" | grep -oE '"file_path":"[^"]+"' | head -1 | cut -d'"' -f4)
+  command_text=$(echo "$input" | grep -oE '"command":"[^"]*"' | head -1 | cut -d'"' -f4)
   session=$(echo "$input" | grep -oE '"session_id":"[^"]+"' | head -1 | cut -d'"' -f4)
+fi
+
+# A Bash call only counts when the command writes: a redirect, tee, an in-place sed, or a
+# python/node snippet opening a file for writing. Reading a source file is not a write.
+if [ -z "$file_path" ] && [ -n "$command_text" ]; then
+  case "$command_text" in
+    *">"*|*"tee "*|*"sed -i"*|*".write("*|*"open("*|*"writeFileSync"*) ;;
+    *) exit 0 ;;
+  esac
+  file_path=$(printf '%s' "$command_text" \
+    | grep -oE "[A-Za-z0-9_./-]+\.(py|ts|tsx|js|jsx)" \
+    | head -1 || true)
 fi
 
 [ -z "$file_path" ] && exit 0
@@ -51,6 +69,9 @@ House comment style applies to this file (skills/SHARED.md, "House style"; also 
 - Quote a setting by its on-screen label, not its field name.
 - Say when you don't know. An honest gap beats an invented rationale.
 - Delete any comment that restates the symbol above it.
+- No comment that argues for the design ("so X doesn't happen"). The test pins it instead.
+- Editing a type, list or signature? Re-read the comment above it - a stale count or name there
+  is the most common thing review catches.
 REMINDER
 
 exit 0

@@ -1,6 +1,6 @@
 ---
 name: team-doctor
-description: Read-only audit of `~/.claude/` and current project against the team baseline. Reports what's present, what's missing, what differs. Never writes — diagnosis only. Run before `/team-setup:team-curate` to see what would change. Use when the user asks "audit my setup", "what's drifted", or "what's the state of my Claude Code config".
+description: Read-only audit of `~/.claude/` and current project against the team baseline. Reports what's present, what's missing, what differs. Never writes - diagnosis only. Run before `/team-setup:team-curate` to see what would change. Use when the user asks "audit my setup", "what's drifted", or "what's the state of my Claude Code config".
 ---
 
 # team-doctor
@@ -23,7 +23,7 @@ Read-only audit. Reports state; never writes.
 
 **Required statusLine command:** `$HOME/.claude/statusline-launcher.sh`.
 
-## Checks — global scope (`~/.claude/`)
+## Checks - global scope (`~/.claude/`)
 
 | check | how |
 |---|---|
@@ -39,7 +39,7 @@ Read-only audit. Reports state; never writes.
 | Skills inventory | list `~/.claude/skills/` |
 | Memory health | list `~/.claude/projects/*/memory/MEMORY.md` files; flag any > 200 lines (signal of body content, not index) |
 
-## Checks — current project scope (`./`)
+## Checks - current project scope (`./`)
 
 | check | how |
 |---|---|
@@ -49,13 +49,14 @@ Read-only audit. Reports state; never writes.
 | Living docs at root of docs/ | `ls docs/*.md` |
 | Hookify rules (if hookify enabled) | `ls .claude/hookify.*.local.md` |
 | settings.local.json | `test -f .claude/settings.local.json` |
+| Project clean-code skills cover the `SHARED.md` rules | for each `.claude/skills/*/SKILL.md` about code quality, list which "Code writing conventions" rules it doesn't cover |
 
 ## Output format
 
-Use this verbatim shape — predictable structure makes drift visible:
+Use this verbatim shape - predictable structure makes drift visible:
 
 ```
-TEAM-DOCTOR — branch: <current-branch>
+TEAM-DOCTOR - branch: <current-branch>
                 global: ~/.claude/
                 project: <pwd>
 
@@ -83,7 +84,7 @@ skills (~/.claude/skills/):
   ✓ write-ticket
   ✓ write-tech-plan
   ✓ ... (full inventory)
-  (info) omc-reference — not in team baseline; OK if intentional
+  (info) omc-reference - not in team baseline; OK if intentional
 
 memory:
   ✓ 3 active project memory dirs

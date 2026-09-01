@@ -9,8 +9,8 @@ Read-only scan. Reports terminology drift; never writes.
 
 ## Required preparation
 
-1. Read `<repo>/docs/glossary.md` if present. Parse the mapping table — every `term → preferred` line.
-2. If no glossary exists, exit cleanly: `"No docs/glossary.md found — skipping. Create one via /team-setup:doc-capture or copy from team-setup/templates/glossary.md.template."`
+1. Read `<repo>/docs/glossary.md` if present. Parse the mapping table - every `term → preferred` line.
+2. If no glossary exists, exit cleanly: `"No docs/glossary.md found - skipping. Create one via /team-setup:doc-capture or copy from team-setup/templates/glossary.md.template."`
 3. Decide scan targets:
    - Default: files modified in the last 7 days (`find . -mtime -7 -type f`)
    - Or: current branch's diff vs `main` (`git diff --name-only main`)
@@ -26,10 +26,10 @@ For each glossary entry of the form `<bad-term> → <preferred-term>`:
 ## Output
 
 ```
-GLOSSARY-CHECK — <N> files scanned, <K> drift signals
+GLOSSARY-CHECK - <N> files scanned, <K> drift signals
 
 ⚠ Drift detected:
-  - <path>:<line> — "<found>" → use "<preferred>"
+  - <path>:<line> - "<found>" → use "<preferred>"
   - ...
 
 ✓ No drift in <list of clean files>
@@ -39,11 +39,11 @@ GLOSSARY-CHECK — <N> files scanned, <K> drift signals
 
 - Don't auto-fix. Suggest replacements; the user applies them.
 - Don't flag terms NOT in the glossary.
-- Don't fail noisily if the glossary doesn't exist — report skipped and exit.
+- Don't fail noisily if the glossary doesn't exist - report skipped and exit.
 - Don't double-flag (if a file contains 5 occurrences of one bad term, list once with a count).
 
 ## Manual vs hookify
 
-Project-level hookify rules (e.g., `<repo>/.claude/hookify.terminology.local.md`) fire on **every** file write — automatic, immediate, per-edit.
+Project-level hookify rules (e.g., `<repo>/.claude/hookify.terminology.local.md`) fire on **every** file write - automatic, immediate, per-edit.
 
 This skill is for **periodic batch scans** across the repo (whole-branch pre-merge sweep, recently-modified-files scan, etc.). The two complement each other.

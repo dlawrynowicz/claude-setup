@@ -291,6 +291,71 @@ def changed_line_numbers(path: str):
     return changed
 
 
+PREDICATE_LINE = re.compile(
+    r"^\s*(?:export\s+)?(?:async\s+)?(?:def|const|let|var|function)\s+"
+    r"((?:is|has|can|should|needs|allows|requires)[A-Z_]\w*)"
+)
+
+
+def comment_runs(source: list) -> list:
+    """Each run of whole-line comments as (first index, last index, text lines), 0-based."""
+    runs, start = [], None
+    for index, raw in enumerate(source):
+        stripped = raw.strip()
+        if stripped.startswith(("#", "//", "*", "/*")):
+            start = index if start is None else start
+        elif start is not None:
+            runs.append((start, index - 1, source[start:index]))
+            start = None
+    if start is not None:
+        runs.append((start, len(source) - 1, source[start:]))
+    return runs
+
+
+def returns_one_expression(source: list, start: int) -> bool:
+    """True when the definition at `start` is a single expression rather than a body of steps."""
+    body = []
+    for raw in source[start : start + 6]:
+        body.append(raw)
+        if raw.rstrip().endswith((";", ":")) and not raw.rstrip().endswith("=>"):
+            break
+    text = " ".join(line.strip() for line in body)
+    return "{" not in text and "return" not in text.split("=>")[-1]
+
+
+def find_redundant_comments(source: list, changed) -> list:
+    """
+    Comments the house rule says to delete, as (1-based line, reason).
+
+    Only one shape is mechanical enough to flag without guessing:
+    a header of two or more lines above a named predicate whose body is a single expression.
+    A predicate that needs a real domain note gets one line ("warning_closed counts as a won
+    dispute");
+    once it runs to a paragraph it is the name again, the design argued for, or both.
+    Every other redundant-comment shape is a judgement call and stays with the reviewer.
+    """
+    findings = []
+    for first, last, _ in comment_runs(source):
+        if last == first:
+            continue
+        if changed is not None and not any(
+            line in changed for line in range(first + 1, last + 2)
+        ):
+            continue
+        following_index = last + 1
+        if following_index >= len(source):
+            continue
+        predicate = PREDICATE_LINE.match(source[following_index])
+        if predicate and returns_one_expression(source, following_index):
+            findings.append(
+                (
+                    first + 1,
+                    f"header above the predicate `{predicate.group(1)}` - the name documents it, delete the comment",
+                )
+            )
+    return findings
+
+
 def rewrap_source(path: str, source: list, width: int, only_changed: bool) -> list:
     rewrap = rewrap_python if path.endswith(".py") else rewrap_typescript
     if not only_changed:
@@ -340,11 +405,25 @@ def main() -> None:
         action="store_true",
         help="Rewrap the whole file instead of only comments near changed lines.",
     )
+    parser.add_argument(
+        "--redundant",
+        action="store_true",
+        help="Report comments the house rule says to delete instead of rewrapping.",
+    )
     args = parser.parse_args()
 
     original = open(args.path).read()
+    source = original.split("\n")
+
+    if args.redundant:
+        changed = None if args.all else changed_line_numbers(args.path)
+        findings = find_redundant_comments(source, changed)
+        for line, reason in findings:
+            print(f"{args.path}:{line}: {reason}")
+        sys.exit(1 if findings and args.check else 0)
+
     result = "\n".join(
-        rewrap_source(args.path, original.split("\n"), args.width, only_changed=not args.all)
+        rewrap_source(args.path, source, args.width, only_changed=not args.all)
     )
 
     if result == original:

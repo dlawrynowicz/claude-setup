@@ -9,7 +9,7 @@ agent: planner
 
 Write implementation plans that assume the engineer has zero context for our codebase and questionable taste. Each step is a bite-sized action (2-5 min). DRY. YAGNI. TDD where applicable. Frequent commits.
 
-**Vendored from `superpowers:writing-plans` v5.1.0** — adapted for team-setup voice, ADR refs, and feature-grouped layout.
+**Vendored from `superpowers:writing-plans` v5.1.0** - adapted for team-setup voice, ADR refs, and feature-grouped layout.
 
 **Announce at start:** "I'm using `/team-setup:plan` to create the implementation plan."
 
@@ -17,16 +17,16 @@ Write implementation plans that assume the engineer has zero context for our cod
 
 1. Read [`../SHARED.md`](../SHARED.md) for tone + ecosystem.
 2. Read the feature's design: `docs/features/<feature>/design.md` (produced by `/team-setup:brainstorm`).
-3. Read [ADR 0002 layered enforcement](../../docs/decisions/0002-layered-enforcement.md) and [ADR 0003 feature-grouped docs](../../docs/decisions/0003-feature-grouped-docs.md).
+3. Read [ADR 0002 layered enforcement](../../../docs/decisions/0002-layered-enforcement.md) and [ADR 0003 feature-grouped docs](../../../docs/decisions/0003-feature-grouped-docs.md).
 4. Run `git branch --show-current` for branch context.
 
 ## Save plans to
 
-`docs/features/<feature>/plan.md` (per ADR 0003). The folder was scaffolded by `/team-setup:doc-feature` during brainstorming — `plan.md` already exists with starter frontmatter; replace the body with your plan.
+`docs/features/<feature>/plan.md` (per ADR 0003). The folder was scaffolded by `/team-setup:doc-feature` during brainstorming - `plan.md` already exists with starter frontmatter; replace the body with your plan.
 
 ## Scope check
 
-If the design covers multiple independent subsystems, it should have been broken into sub-project specs during brainstorming. If it wasn't, suggest breaking this into separate plans — one per subsystem. Each plan should produce working, testable software on its own.
+If the design covers multiple independent subsystems, it should have been broken into sub-project specs during brainstorming. If it wasn't, suggest breaking this into separate plans - one per subsystem. Each plan should produce working, testable software on its own.
 
 ## File structure
 
@@ -41,11 +41,11 @@ Before defining tasks, map out which files will be created or modified and what 
 
 Each step is one action (2-5 minutes):
 
-- "Write the failing test" — step
-- "Run it to make sure it fails" — step
-- "Implement the minimal code to make the test pass" — step
-- "Run the tests and make sure they pass" — step
-- "Commit" — step
+- "Write the failing test" - step
+- "Run it to make sure it fails" - step
+- "Implement the minimal code to make the test pass" - step
+- "Run the tests and make sure they pass" - step
+- "Commit" - step
 
 ## Plan document header
 
@@ -110,36 +110,36 @@ git commit -m "feat: add specific feature"
 
 ## TDD note (per ADR 0002)
 
-TDD is SOFT-tier discipline: recommended, not blocked. For most plans, structure tasks around the test-first cycle. For non-testable changes (config, docs, refactor with full coverage), skip the test step but mark it explicitly: `# (no test — refactor preserves behavior; existing tests cover)`.
+TDD is SOFT-tier discipline: recommended, not blocked. For most plans, structure tasks around the test-first cycle. For non-testable changes (config, docs, refactor with full coverage), skip the test step but mark it explicitly: `# (no test - refactor preserves behavior; existing tests cover)`.
 
 ## No placeholders
 
-Every step must contain the actual content an engineer needs. These are plan failures — never write them:
+Every step must contain the actual content an engineer needs. These are plan failures - never write them:
 
 - "TBD", "TODO", "implement later", "fill in details"
 - "Add appropriate error handling" / "add validation" / "handle edge cases"
 - "Write tests for the above" (without actual test code)
-- "Similar to Task N" (repeat the code — the engineer may read tasks out of order)
+- "Similar to Task N" (repeat the code - the engineer may read tasks out of order)
 - Steps that describe WHAT to do without showing HOW (code blocks required for code steps)
 - References to types, functions, or methods not defined in any task
 
 ## Remember
 
 - Exact file paths always.
-- Complete code in every step — if a step changes code, show the code.
+- Complete code in every step - if a step changes code, show the code.
 - Exact commands with expected output.
 - DRY, YAGNI, TDD-where-applicable, frequent commits.
 
 ## Self-review
 
-After writing the complete plan, check it against the design with fresh eyes. Run yourself — not a subagent dispatch.
+After writing the complete plan, check it against the design with fresh eyes. Run yourself - not a subagent dispatch.
 
 1. **Spec coverage:** skim each section of `design.md`. Can you point to a task that implements it? List any gaps.
 2. **Placeholder scan:** search your plan for red flags from "No placeholders" above. Fix them.
 3. **Type consistency:** do types, method signatures, property names match across tasks? `clearLayers()` in Task 3 vs `clearFullLayers()` in Task 7 is a bug.
 4. **Branch awareness:** if on a feature branch, file paths should reflect the branch's structure (not main's).
 
-Fix issues inline. No re-review — just fix and move on.
+Fix issues inline. No re-review - just fix and move on.
 
 ## Execution handoff
 
@@ -151,4 +151,4 @@ After saving the plan:
 
 - Skip the design phase ("brainstorming was enough"). Plan is its own artifact.
 - Write plans without exact file paths or complete code blocks.
-- Force tasks past blockers — if the design has gaps, go back to `/team-setup:brainstorm`.
+- Force tasks past blockers - if the design has gaps, go back to `/team-setup:brainstorm`.

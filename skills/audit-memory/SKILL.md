@@ -1,6 +1,6 @@
 ---
 name: audit-memory
-description: Audit `MEMORY.md` and memory files in `~/.claude/projects/*/memory/` for bloat, duplicates, and stale entries. Read-only — surfaces a matrix of findings; never modifies files. Run quarterly or whenever `/context` at session start surprises you. Companion to `/team-setup:team-doctor`.
+description: Audit `MEMORY.md` and memory files in `~/.claude/projects/*/memory/` for bloat, duplicates, and stale entries. Read-only - surfaces a matrix of findings; never modifies files. Run quarterly or whenever `/context` at session start surprises you. Companion to `/team-setup:team-doctor`.
 ---
 
 # audit-memory
@@ -18,14 +18,14 @@ Read-only audit of the auto-memory system. Surfaces findings as a matrix; never 
 |---|---|---|
 | 1 | **Size check** | `wc -l ~/.claude/projects/<id>/memory/*.md` sorted by line count. Flag any single file > 50 lines (likely has body content that belongs in `docs/`). |
 | 2 | **MEMORY.md hygiene** | Read `MEMORY.md`. Flag lines > 150 chars (probably body content hiding in an index entry). Flag total length > 30 lines. |
-| 3 | **Stale check** | `find ~/.claude/projects/<id>/memory -mtime +60 -name "*.md"` — files not touched in 60+ days. |
+| 3 | **Stale check** | `find ~/.claude/projects/<id>/memory -mtime +60 -name "*.md"` - files not touched in 60+ days. |
 | 4 | **Duplicate check** | For each memory file title, grep `docs/` for the same topic. If found, flag as potential duplicate. |
 | 5 | **Active-features check** | If `project_active_features.md` exists, cross-check listed branches against `git branch -a`. Branches no longer present likely mean stale memory. |
 
 ## Output
 
 ```
-AUDIT-MEMORY — ~/.claude/projects/<id>/memory/
+AUDIT-MEMORY - ~/.claude/projects/<id>/memory/
 
 | file                | size | last modified | finding              | action       |
 |---------------------|------|---------------|----------------------|--------------|

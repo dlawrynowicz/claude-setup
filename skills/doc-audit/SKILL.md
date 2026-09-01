@@ -1,6 +1,6 @@
 ---
 name: doc-audit
-description: Audit `docs/` for drift. Reports stale files (>90 days untouched), broken cross-references, missing ADR numbers, features with code activity but no doc activity. Branch-aware — distinguishes current branch view from main. Read-only; suggests fixes but never writes.
+description: Audit `docs/` for drift. Reports stale files (>90 days untouched), broken cross-references, missing ADR numbers, features with code activity but no doc activity. Branch-aware - distinguishes current branch view from main. Read-only; suggests fixes but never writes.
 ---
 
 # doc-audit
@@ -18,9 +18,9 @@ Read-only audit of `docs/`. Reports drift; never writes files.
 
 | signal | what to report |
 |---|---|
-| File untouched >90 days | `stale: <path> (last modified <date>) — verify still current` |
+| File untouched >90 days | `stale: <path> (last modified <date>) - verify still current` |
 | Cross-reference to non-existent file | `broken ref: <path> references <missing-path>` |
-| ADR number gap (e.g. 0001, 0002, 0004 — missing 0003) | `ADR gap: missing 0003 in <location>` |
+| ADR number gap (e.g. 0001, 0002, 0004 - missing 0003) | `ADR gap: missing 0003 in <location>` |
 | Feature folder exists but has no `design.md` or `plan.md` | `incomplete feature: <feature> lacks design or plan` |
 | Code in `<area>` modified recently but `docs/<area>.md` untouched | `doc lag: <area> code changed, doc unchanged` |
 | Feature folder on this branch but not on main | `in-flight: <feature> (informational, not drift)` |
@@ -28,7 +28,7 @@ Read-only audit of `docs/`. Reports drift; never writes files.
 ## Output format
 
 ```
-DOC AUDIT — branch: <current-branch>
+DOC AUDIT - branch: <current-branch>
 
 Stale (>90 days):
   - docs/transactions.md (last modified 2026-02-15)
@@ -56,6 +56,6 @@ In-flight (informational):
 
 ## When to run
 
-- Before merging a feature branch — make sure docs are caught up.
-- Periodically (monthly) — `team-doctor` invokes this silently and surfaces only if drift detected.
-- Before a workshop or onboarding — make sure docs reflect current truth.
+- Before merging a feature branch - make sure docs are caught up.
+- Periodically (monthly) - `team-doctor` invokes this silently and surfaces only if drift detected.
+- Before a workshop or onboarding - make sure docs reflect current truth.

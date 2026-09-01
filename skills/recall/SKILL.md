@@ -1,6 +1,6 @@
 ---
 name: recall
-description: Search prior Claude Code sessions for context — use when the user asks "what did we discuss about X?", "did we ever decide on Y?", or you need to recover context from a previous session that isn't in current memory.
+description: Search prior Claude Code sessions for context - use when the user asks "what did we discuss about X?", "did we ever decide on Y?", or you need to recover context from a previous session that isn't in current memory.
 ---
 
 You are searching prior Claude Code sessions.
@@ -18,6 +18,6 @@ Steps:
    | when | session | context snippet |
 5. If no matches in current project, ask the user if you should expand to all projects.
 
-Don't dump raw JSONL — extract user messages and assistant text only. Skip tool calls and tool results.
+Don't dump raw JSONL - extract user messages and assistant text only. Skip tool calls and tool results.
 
 If the user invokes `/recall search-only "<term>"`, just list matching session files without context (faster).

@@ -32,6 +32,10 @@ match_skill() {
       printf '%s\t%s\n' "plan" "planning"
       return 0
       ;;
+    *"learn from this"*|*"learn from the feedback"*|*"so we don't repeat"*|*"same mistake"*|*"update the skills"*|*"update our skills"*)
+      printf '%s\t%s\n' "harvest" "turning findings into rules"
+      return 0
+      ;;
     *"review my"*|*"check my code"*|*"discipline check"*|*"review the"*)
       printf '%s\t%s\n' "discipline-check" "review"
       return 0

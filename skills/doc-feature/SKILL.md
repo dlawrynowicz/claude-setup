@@ -1,11 +1,11 @@
 ---
 name: doc-feature
-description: Scaffold a new feature folder under `docs/features/<feature-name>/` with starter `design.md`, `plan.md`, `notes.md` files. Pre-fills frontmatter (feature name, status, date, current branch). Idempotent — refuses to overwrite existing files. Use before starting work on a new feature.
+description: Scaffold a new feature folder under `docs/features/<feature-name>/` with starter `design.md`, `plan.md`, `notes.md` files. Pre-fills frontmatter (feature name, status, date, current branch). Idempotent - refuses to overwrite existing files. Use before starting work on a new feature.
 ---
 
 # doc-feature
 
-Scaffold a new feature folder. Idempotent — never overwrites.
+Scaffold a new feature folder. Idempotent - never overwrites.
 
 ## Required preparation
 
@@ -22,7 +22,7 @@ docs/features/<feature-name>/
 └── notes.md
 ```
 
-## Starter content — `design.md`
+## Starter content - `design.md`
 
 ```markdown
 ---
@@ -33,11 +33,11 @@ date: <YYYY-MM-DD>
 branch: <git-branch>
 ---
 
-# <feature-name> — design
+# <feature-name> - design
 
 ## Purpose
 
-(what this feature does, who it's for, why it matters — 2-3 sentences)
+(what this feature does, who it's for, why it matters - 2-3 sentences)
 
 ## Principles
 
@@ -48,7 +48,7 @@ branch: <git-branch>
 (things to resolve before implementation)
 ```
 
-## Starter content — `plan.md`
+## Starter content - `plan.md`
 
 ```markdown
 ---
@@ -60,7 +60,7 @@ branch: <git-branch>
 references: ./design.md
 ---
 
-# <feature-name> — implementation plan
+# <feature-name> - implementation plan
 
 ## Build sequence
 
@@ -79,7 +79,7 @@ references: ./design.md
 - **v1 (<YYYY-MM-DD>)**: initial plan.
 ```
 
-## Starter content — `notes.md`
+## Starter content - `notes.md`
 
 ```markdown
 ---
@@ -89,9 +89,9 @@ date: <YYYY-MM-DD>
 branch: <git-branch>
 ---
 
-# <feature-name> — notes
+# <feature-name> - notes
 
-(scratch, observations, links — append as you work)
+(scratch, observations, links - append as you work)
 ```
 
 ## Idempotency
