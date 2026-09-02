@@ -50,11 +50,16 @@
         "hooks": [
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks-handlers/review-required.sh"
-          },
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks-handlers/code-style-reminder.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "Write|Edit|Bash",
+        "hooks": [
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks-handlers/code-style-reminder.sh"
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks-handlers/review-required.sh"
           }
         ]
       }

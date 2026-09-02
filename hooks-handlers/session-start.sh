@@ -8,6 +8,7 @@
 #      priming is what creates the invocation bias (mirrors how learning-output-style
 #      works for output style).
 #   2. Conditionally surface doc-audit drift signals when stale files are present.
+#   3. Flag a forked ~/.claude/skills/SHARED.md, which silently splits the rule set in two.
 #
 # Reads stdin JSON (SessionStart event with cwd); writes hookSpecificOutput JSON.
 
@@ -53,7 +54,16 @@ audit_msg=""
   fi
 } || audit_msg=""
 
-msg="${priming}${audit_msg}"
+# 3. SHARED.md fork check — wrapped like the audit so a failure can't kill priming
+fork_msg=""
+{
+  shared="$HOME/.claude/skills/SHARED.md"
+  if [ -e "$shared" ] && [ ! -L "$shared" ]; then
+    fork_msg=" Also: ~/.claude/skills/SHARED.md is a regular file, not a symlink to this plugin's skills/SHARED.md. Project skills reference it by absolute path, so they read that copy while the plugin's rules move on and neither side knows. Run team-setup:team-curate to reconcile it."
+  fi
+} || fork_msg=""
+
+msg="${priming}${audit_msg}${fork_msg}"
 
 if command -v jq >/dev/null 2>&1; then
   jq -n --arg ctx "$msg" '{

@@ -30,6 +30,12 @@ For each gap the audit found, propose a specific change. Group by scope:
 - `statusLine.command` not at expected path → set to `$HOME/.claude/statusline-launcher.sh`
 - `statusline.mjs` / `statusline-launcher.sh` missing → copy from `<plugin-root>/setup/` (run `setup/install.sh` once for the OS-level wiring)
 - Plugins outside keep list → offer to set their `enabledPlugins` entries to `false` (this is the prune)
+- `~/.claude/skills/SHARED.md` is a regular file → it is a fork. Project skills reference it by absolute path, so they read the fork while harvests edit the plugin copy, and neither side knows. Repair in this order, because the fork usually holds real content:
+  1. Diff it against `<plugin-root>/skills/SHARED.md`. List every rule the fork has and the plugin doesn't.
+  2. Give each one a home as its own plan item - a universal rule goes into the plugin's `SHARED.md`, a project term or docs index goes to that project's `docs/glossary.md` or `CLAUDE.md`. Never drop one to make the diff clean.
+  3. Back up to `SHARED.md.pre-reconcile-<date>.bak`, then replace the file with a symlink to `<plugin-root>/skills/SHARED.md`.
+  Confirm step 3 on its own - it changes what every project's skills read.
+- Symlink repaired this run → re-run the project clean-code coverage check below. Earlier runs compared those skills against the fork, so every rule the fork was missing was scored as covered.
 
 ### Project shared (`./`)
 - Missing `./CLAUDE.md` → copy from `templates/CLAUDE.md.project.template`, prompt for `{{PROJECT_NAME}}`

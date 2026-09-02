@@ -36,6 +36,7 @@ Read-only audit. Reports state; never writes.
 | CLAUDE.md has each required section | `grep -c "^## Voice"`, etc. |
 | statusline.mjs present | `test -f ~/.claude/statusline.mjs` |
 | statusline-launcher.sh present + executable | `test -x ~/.claude/statusline-launcher.sh` |
+| `SHARED.md` is the plugin's, not a fork | `test -L ~/.claude/skills/SHARED.md`. It must be a symlink to `$CLAUDE_PLUGIN_ROOT/skills/SHARED.md`. A regular file there is a fork that drifts silently - project skills reference it by absolute path, so they read the fork while harvests edit the plugin copy. |
 | Skills inventory | list `~/.claude/skills/` |
 | Memory health | list `~/.claude/projects/*/memory/MEMORY.md` files; flag any > 200 lines (signal of body content, not index) |
 

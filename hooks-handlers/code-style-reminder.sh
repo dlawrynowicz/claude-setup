@@ -21,21 +21,25 @@ set -euo pipefail
 
 input=$(cat)
 
-tool=$(echo "$input" | grep -oE '"tool_name":"[^"]+"' | head -1 | cut -d'"' -f4)
-case "$tool" in
-  Write|Edit|Bash) ;;
-  *) exit 0 ;;
-esac
-
+# Read every field the same way. The grep fallback needs the no-space spelling
+# ("tool_name":"Bash"); a payload with a space after the colon leaves the field empty and
+# set -e ends the hook before it says anything.
 if command -v jq >/dev/null 2>&1; then
+  tool=$(echo "$input" | jq -r '.tool_name // empty')
   file_path=$(echo "$input" | jq -r '.tool_input.file_path // empty')
   command_text=$(echo "$input" | jq -r '.tool_input.command // empty')
   session=$(echo "$input" | jq -r '.session_id // empty')
 else
-  file_path=$(echo "$input" | grep -oE '"file_path":"[^"]+"' | head -1 | cut -d'"' -f4)
-  command_text=$(echo "$input" | grep -oE '"command":"[^"]*"' | head -1 | cut -d'"' -f4)
-  session=$(echo "$input" | grep -oE '"session_id":"[^"]+"' | head -1 | cut -d'"' -f4)
+  tool=$(echo "$input" | grep -oE '"tool_name": ?"[^"]+"' | head -1 | cut -d'"' -f4 || true)
+  file_path=$(echo "$input" | grep -oE '"file_path": ?"[^"]+"' | head -1 | cut -d'"' -f4 || true)
+  command_text=$(echo "$input" | grep -oE '"command": ?"[^"]*"' | head -1 | cut -d'"' -f4 || true)
+  session=$(echo "$input" | grep -oE '"session_id": ?"[^"]+"' | head -1 | cut -d'"' -f4 || true)
 fi
+
+case "$tool" in
+  Write|Edit|Bash) ;;
+  *) exit 0 ;;
+esac
 
 # A Bash call only counts when the command writes: a redirect, tee, an in-place sed, or a
 # python/node snippet opening a file for writing. Reading a source file is not a write.
@@ -62,7 +66,11 @@ marker="${TMPDIR:-/tmp}/claude-style-reminder-${session:-$PPID}-${family}"
 touch "$marker"
 
 cat <<REMINDER
-House comment style applies to this file (skills/SHARED.md, "House style"; also the project's $skill skill):
+House code style applies to this file (skills/SHARED.md; also the project's $skill skill):
+- Simple beats clever. The reader should follow this file top to bottom without holding stack frames.
+- A helper called once belongs inlined in its caller. Extracting it is only right when it stays on
+  the entity it reads (a model or queryset method) - if extracting adds an import to the caller,
+  write the body in the caller instead.
 - Branching on a domain case? Lead-in line, then one bullet per case, naming the case in domain
   words rather than the isinstance/type check. Not a prose paragraph.
 - Say "we", present tense. Not "the system", not passive.
