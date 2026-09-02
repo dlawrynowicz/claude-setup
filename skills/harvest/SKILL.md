@@ -77,7 +77,15 @@ When the rule already existed and was never shown, editing it changes nothing. F
 
 Verify the fix by replaying the event that should have fired it. A hook you have not run against a real event shape is a guess.
 
-## Phase 5 - report, don't commit
+## Phase 5 - apply it to the code in front of you
+
+A harvest that ends at the rule file ships the violation it was written for. The code you wrote earlier this session was written without the rule you just sharpened, and it is still in the diff.
+
+Before reporting: re-read your own changes against that rule and fix what it catches. Not the whole repo - the files you touched this session.
+
+This is the step that decides whether the harvest was worth doing. Sharpening the comment rule and leaving a design-arguing comment three files away is how the same correction arrives twice, and it is the moment the user asks why the mistake keeps repeating.
+
+## Phase 6 - report, don't commit
 
 Show the user:
 
@@ -90,6 +98,7 @@ Never commit. Never add a rule the user has not seen.
 
 ## Don't
 
+- Don't stop at the rule file. Phase 5 is not optional.
 - Don't harvest hypotheticals - only things that actually went wrong.
 - Don't add a rule without grepping first.
 - Don't append a near-duplicate; sharpen the original.
